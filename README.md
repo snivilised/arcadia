@@ -33,7 +33,17 @@ This project is a template to aid in the startup of Go cli applications.
 </p>
 
 + unit testing with [Ginkgo](https://onsi.github.io/ginkgo/)/[Gomega](https://onsi.github.io/gomega/)
-+ implmented with [Cobra](https://cobra.dev/) cli framework
++ implemented with [Cobra](https://cobra.dev/) cli framework
 + i18n with `tbd`
 ## 🧰 Developer Info
 
+### 📝 Checklist of required changes
+
+The following is list of actions that must be performed before using this template. Most of the changes concern changing the name `Arcadia` to the name of the new application.
+
+As the template is instantiated from github, the new name will automatically replace the top level directory name, that being ___arcadia___.
+
++ `github actions workflow`: If the client application needs to use github actions for continuous integration, then the name of the [workflow](.github/workflows/ci-workflow.yml) needs to be changed. If not, then the workflow file should be deleted
++ `remove the dummy code`: __greeting.go__ and its associated test __greeting_test.go__ (but only do this once new valid tests are ready to replace it, to avoid references being removed after _go mod tidy_)
++ `replace README content`
++ `update BINARY_NAME`: inside _Taskfile.yml_, change the value of ___BINARY_NAME___ to the name of the client application

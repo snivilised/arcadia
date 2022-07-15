@@ -110,3 +110,7 @@ tasks:
   clean:
     cmds:
       - cmd: rm -rf dist/*
+
+  cover:
+    cmds:
+      - goveralls -repotoken {{.COVERALLS_TOKEN}}
