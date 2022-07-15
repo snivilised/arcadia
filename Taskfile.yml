@@ -1,0 +1,112 @@
+version: '3'
+silent: true
+
+dotenv: ['.env']
+
+vars:
+  BINARY_NAME: arcadia
+  BUILD_EXE: "tbd"
+
+tasks:
+  build_generic:
+    vars:
+      APPLICATION_SRC: ./src/app
+      SRC_CODE: ./src
+
+    cmds:
+      - echo "cross compiling from {{OS}} to {{.TARGET_OS}}"
+      - GOOS={{.TARGET_OS}} GOARCH={{.TARGET_ARCH}} go build -o ./dist/{{.TARGET_OS}}/{{.BINARY_NAME}}{{.BINARY_EXT}} -v {{.APPLICATION_SRC}}
+
+    sources:
+      - ./src/**/*.go
+
+    generates:
+      - ./dist/{{.TARGET_OS}}/{{.BINARY_NAME}}{{.BINARY_EXT}}
+
+  b:
+    cmds:
+      - task: build-w
+
+  build-w:
+    cmds:
+      - task: build_generic
+        vars: {TARGET_OS: windows, TARGET_ARCH: amd64, BINARY_EXT: .exe}
+
+  build-l:
+    cmds:
+      - task: build_generic
+        vars: {TARGET_OS: linux, TARGET_ARCH: amd64}
+
+  build-m:
+    cmds:
+      - task: build_generic
+        vars: {TARGET_OS: darwin, TARGET_ARCH: amd64}
+
+  d:
+    cmds:
+      - task: deploy
+
+  dry:
+    cmds:
+      - ginkgo -v --dry-run ./...
+
+  watchv:
+    cmds:
+      - ginkgo watch -v -r -p ./...
+
+  watch:
+    cmds:
+      - ginkgo watch -r -p ./...
+
+  # initialise a test suite for a package. (only 1 per package)
+  boot:
+    cmds:
+      - ginkgo bootstrap
+
+  # run tests suites recursive
+  g:
+    cmds:
+      - ginkgo -r
+
+  # invoke as task gen -- <item>
+  gl:
+    cmds:
+      - ginkgo -r --label-filter={{.CLI_ARGS}}
+
+  # run tests suites recursive with verbose
+  gv:
+    cmds:
+      - ginkgo -r -v
+
+  # generate a test file for the item provided (item_test.go)
+  # invoke as task gen -- <item>
+  gen:
+    cmds:
+      - ginkgo generate {{.CLI_ARGS}}
+ 
+  # currently, this is hardcoded for windows
+  #
+  deploy:
+    vars:
+      BINARY_EXT: .exe
+      TARGET_OS: windows
+      DEPLOY_BINARY: ./dist/{{.TARGET_OS}}/{{.BINARY_NAME}}{{.BINARY_EXT}}
+
+    cmds:
+      - echo "deploying to location (.env) DEPLOY_TO  ==> '$DEPLOY_TO'"
+      - /bin/cp -f {{.DEPLOY_BINARY}} $DEPLOY_TO
+
+    generates:
+      - $DEPLOY_TO/{{.DEPLOY_BINARY}}
+
+    preconditions:
+      - test $DEPLOY_TO
+      - test -f {{.DEPLOY_BINARY}}
+
+  c:
+    cmds:
+      - task: clean
+
+  clean:
+    cmds:
+      - cmd: rm -rf dist/*
