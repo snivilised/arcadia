@@ -10,7 +10,7 @@ vars:
 tasks:
   build_generic:
     vars:
-      APPLICATION_SRC: ./src/app
+      APPLICATION_SRC: ./src/app/main
       SRC_CODE: ./src
 
     cmds:
