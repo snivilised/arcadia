@@ -1,7 +1,11 @@
+/*
+Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+
+*/
 package main
 
-import "fmt"
+import "github.com/snivilised/arcadia/src/app/main/cobracmd"
 
 func main() {
-	fmt.Printf("===> 🦄 Arcadia \n")
+	cobracmd.Execute()
 }

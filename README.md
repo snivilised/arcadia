@@ -33,7 +33,7 @@ This project is a template to aid in the startup of Go cli applications.
 </p>
 
 + unit testing with [Ginkgo](https://onsi.github.io/ginkgo/)/[Gomega](https://onsi.github.io/gomega/)
-+ implemented with [Cobra](https://cobra.dev/) cli framework
++ implemented with [🐍 Cobra](https://cobra.dev/) cli framework, assisted by [🐲 Cobrass](https://github.com/snivilised/cobrass)
 + i18n with `tbd`
 ## 🧰 Developer Info
 
@@ -47,3 +47,5 @@ As the template is instantiated from github, the new name will automatically rep
 + `remove the dummy code`: __greeting.go__ and its associated test __greeting_test.go__ (but only do this once new valid tests are ready to replace it, to avoid references being removed after _go mod tidy_)
 + `replace README content`
 + `update BINARY_NAME`: inside _Taskfile.yml_, change the value of ___BINARY_NAME___ to the name of the client application
++ `update email address in copyright statement`: the __root.go__ file contains a placeholder for an email adress, update this comment accordingly
++ `create .env file`: add any appropriate secrets to a newly created .env in the root directory and to enable the __deploy__ task to work, define a __DEPLOY_TO__ entry that defines where builds should be deployed to for testing
