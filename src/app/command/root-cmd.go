@@ -2,7 +2,7 @@
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 
 */
-package main
+package command
 
 import (
 	"fmt"
@@ -13,8 +13,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-// consider moving these definitions elsewhere
-//
 const AppEmoji = "🦄"
 const ApplicationName = "arcadia"
 
