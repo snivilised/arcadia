@@ -1,3 +1,3 @@
-package main
+package command
 
 const Version = "0.1.0"
