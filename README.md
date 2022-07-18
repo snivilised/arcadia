@@ -44,7 +44,7 @@ The following is list of actions that must be performed before using this templa
 As the template is instantiated from github, the new name will automatically replace the top level directory name, that being ___arcadia___.
 
 + `github actions workflow`: If the client application needs to use github actions for continuous integration, then the name of the [workflow](.github/workflows/ci-workflow.yml) needs to be changed. If not, then the workflow file should be deleted
-+ `remove the dummy code`: __greeting.go__ and its associated test __greeting_test.go__ (but only do this once new valid tests are ready to replace it, to avoid references being removed after _go mod tidy_)
++ `remove the dummy code`: __widget-cmd.go__, __greeting.go__ and its associated test __greeting_test.go__ (but only do this once new valid tests are ready to replace it, to avoid references being removed after _go mod tidy_)
 + `replace README content`
 + `update BINARY_NAME`: inside _Taskfile.yml_, change the value of ___BINARY_NAME___ to the name of the client application
 + `update email address in copyright statement`: the __root.go__ file contains a placeholder for an email adress, update this comment accordingly
