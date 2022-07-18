@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/snivilised/cobrass/src/adapters"
+	"github.com/snivilised/cobrass/src/assistant"
 	"github.com/spf13/cobra"
 )
 
@@ -19,13 +19,13 @@ const (
 	ScribbleFormatEn
 )
 
-var OutputFormatEnumInfo = adapters.NewEnumInfo(adapters.AcceptableEnumValues[OutputFormatEnum]{
+var OutputFormatEnumInfo = assistant.NewEnumInfo(assistant.AcceptableEnumValues[OutputFormatEnum]{
 	XmlFormatEn:      []string{"xml", "x"},
 	JsonFormatEn:     []string{"json", "j"},
 	TextFormatEn:     []string{"text", "tx"},
 	ScribbleFormatEn: []string{"scribble", "scribbler", "scr"},
 })
-var OutputFormatEn adapters.EnumValue[OutputFormatEnum]
+var OutputFormatEn assistant.EnumValue[OutputFormatEnum]
 
 type WidgetParameterSet struct {
 	Directory string
@@ -43,7 +43,7 @@ func init() {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var appErr error = nil
 
-			ps := Container.MustGetParamSet("widget-ps").(*adapters.ParamSet[WidgetParameterSet])
+			ps := Container.MustGetParamSet("widget-ps").(*assistant.ParamSet[WidgetParameterSet])
 
 			if err := ps.Validate(); err == nil {
 				native := ps.Native
@@ -77,9 +77,9 @@ func init() {
 		},
 	}
 
-	paramSet := adapters.NewParamSet[WidgetParameterSet](widgetCommand)
+	paramSet := assistant.NewParamSet[WidgetParameterSet](widgetCommand)
 	paramSet.BindValidatedString(
-		adapters.NewFlagInfo("directory", "d", "/foo-bar"),
+		assistant.NewFlagInfo("directory", "d", "/foo-bar"),
 		&paramSet.Native.Directory,
 		func(value string) error {
 			if _, err := os.Stat(value); err != nil {
@@ -93,7 +93,7 @@ func init() {
 
 	OutputFormatEn = OutputFormatEnumInfo.NewValue()
 	paramSet.BindValidatedEnum(
-		adapters.NewFlagInfo("format", "f", "xml"),
+		assistant.NewFlagInfo("format", "f", "xml"),
 		&OutputFormatEn.Source,
 		func(value string) error {
 			if OutputFormatEnumInfo.En(value) == XmlFormatEn {
@@ -104,12 +104,12 @@ func init() {
 	)
 
 	paramSet.BindBool(
-		adapters.NewFlagInfo("concise", "c", false),
+		assistant.NewFlagInfo("concise", "c", false),
 		&paramSet.Native.Concise,
 	)
 
 	paramSet.BindValidatedString(
-		adapters.NewFlagInfo("pattern", "p", ""),
+		assistant.NewFlagInfo("pattern", "p", ""),
 		&paramSet.Native.Pattern,
 		func(value string) error {
 			result := strings.Contains(value, "P?<date>") ||
@@ -129,7 +129,7 @@ func init() {
 	const hi = uint(50)
 
 	paramSet.BindValidatedUintWithin(
-		adapters.NewFlagInfo("threshold", "t", uint(10)),
+		assistant.NewFlagInfo("threshold", "t", uint(10)),
 		&paramSet.Native.Threshold,
 		lo, hi,
 	)

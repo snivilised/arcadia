@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/snivilised/cobrass/src/adapters"
+	"github.com/snivilised/cobrass/src/assistant"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -20,7 +20,7 @@ const ApplicationName = "arcadia"
 
 var cfgFile string
 
-var Container = adapters.NewCobraContainer(
+var Container = assistant.NewCobraContainer(
 	&cobra.Command{
 		Use:   "main",
 		Short: "A brief description of your application",
