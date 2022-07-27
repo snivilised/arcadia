@@ -46,6 +46,7 @@ As the template is instantiated from github, the new name will automatically rep
 + `github actions workflow`: If the client application needs to use github actions for continuous integration, then the name of the [workflow](.github/workflows/ci-workflow.yml) needs to be changed. If not, then the workflow file should be deleted
 + `remove the dummy code`: __widget-cmd.go__, __greeting.go__ and its associated test __greeting_test.go__ (but only do this once new valid tests are ready to replace it, to avoid references being removed after _go mod tidy_)
 + `replace README content`
-+ `update BINARY_NAME`: inside _Taskfile.yml_, change the value of ___BINARY_NAME___ to the name of the client application
-+ `update email address in copyright statement`: the __root.go__ file contains a placeholder for an email adress, update this comment accordingly
-+ `create .env file`: add any appropriate secrets to a newly created .env in the root directory and to enable the __deploy__ task to work, define a __DEPLOY_TO__ entry that defines where builds should be deployed to for testing
++ `update BINARY_NAME`: Inside _Taskfile.yml_, change the value of ___BINARY_NAME___ to the name of the client application.
++ `update email address in copyright statement`: The __root.go__ file contains a placeholder for an email adress, update this comment accordingly
++ `create .env file`: Add any appropriate secrets to a newly created .env in the root directory and to enable the __deploy__ task to work, define a __DEPLOY_TO__ entry that defines where builds should be deployed to for testing
++ `update message id`: This package supports i18n and as part of that defines messages that need to be translated. The user needs to update the message ids of defined messages in `messages.go`, which by default contain ___arcadia___ as part of the id.
