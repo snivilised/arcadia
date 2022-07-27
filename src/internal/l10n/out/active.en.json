@@ -1,0 +1,6 @@
+{
+  "language-not-supported.arcadia": {
+    "description": "The language specified is not supported; no translations for this language.",
+    "other": "language '{{.Language}}' not supported"
+  }
+}

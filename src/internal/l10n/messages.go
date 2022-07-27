@@ -6,14 +6,16 @@ type Localisable interface {
 	Message() *i18n.Message
 }
 
-type PsDummyTemplData struct {
-	Name string
+// language not supported
+//
+type LanguageNotSupportedTemplData struct {
+	Language string
 }
 
-func (td PsDummyTemplData) Message() *i18n.Message {
+func (td LanguageNotSupportedTemplData) Message() *i18n.Message {
 	return &i18n.Message{
-		ID:          "dummy.arcadia",
-		Description: "THIS IS A DUMMY",
-		Other:       "Dummy ('{{.Name}}')",
+		ID:          "language-not-supported.arcadia",
+		Description: "The language specified is not supported; no translations for this language.",
+		Other:       "language '{{.Language}}' not supported",
 	}
 }
