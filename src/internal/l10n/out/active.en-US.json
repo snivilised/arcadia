@@ -1,1 +1,7 @@
-{}
+{
+  "language-not-supported.arcadia": {
+    "description": "The language specified is not supported; no translations for this language.",
+    "hash": "sha1-fd33f3e597c158b9bbd614e98b3dbd7c4abda700",
+    "other": "language '{{.Language}}' not supported"
+  }
+}

@@ -20,3 +20,5 @@ coverage.out
 ginkgo.report
 
 .task/
+
+src/internal/l10n/out/translate.en-US.json

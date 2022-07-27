@@ -21,6 +21,9 @@ import (
 // do merge
 // goi18n merge -outdir out -format json active.en.json translate.en-US.json
 //
+// nb: translate.en-US.json is an output file that does not need to be stored
+// in source control
+//
 
 // LanguageInfo indicates information relating to current language. See members for
 // details.
@@ -133,7 +136,7 @@ func createIncrementalLanguageInfo(requested language.Tag, existing *LanguageInf
 func createLocaliser(li *LanguageInfo) *i18n.Localizer {
 	bundle := i18n.NewBundle(languages.Current)
 	bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
-	bundle.MustLoadMessageFile("../../internal/l10n/out/translate.en-US.json")
+	bundle.MustLoadMessageFile("../../internal/l10n/out/active.en-US.json")
 
 	supported := lo.Map(languages.Supported, func(t language.Tag, _ int) string {
 		return t.String()
