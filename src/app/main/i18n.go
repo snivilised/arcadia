@@ -67,7 +67,7 @@ func UseTag(tag language.Tag) error {
 		languages = createIncrementalLanguageInfo(tag, languages)
 		localiser = createLocaliser(languages)
 	} else {
-		return fmt.Errorf(getLanguageNotSupportedErrorMessage(tag))
+		return fmt.Errorf(GetLanguageNotSupportedErrorMessage(tag))
 	}
 
 	return nil
@@ -152,7 +152,7 @@ func localise(data l10n.Localisable) string {
 	})
 }
 
-func getLanguageNotSupportedErrorMessage(tag language.Tag) string {
+func GetLanguageNotSupportedErrorMessage(tag language.Tag) string {
 	data := l10n.LanguageNotSupportedTemplData{
 		Language: tag.String(),
 	}
