@@ -17,6 +17,7 @@ const AppEmoji = "🦄"
 const ApplicationName = "arcadia"
 
 var cfgFile string
+var lang string
 
 var Container = assistant.NewCobraContainer(
 	&cobra.Command{
@@ -52,11 +53,24 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCommand.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.main.yaml)")
+	bindToConfig := &cfgFile
+	const configFlagName = "config"
+	const defConfig = ""
+	const configUsage = "config file (default is $HOME/.arcadia.yml)"
+	rootCommand.PersistentFlags().StringVar(bindToConfig, configFlagName, defConfig, configUsage)
+
+	bindToLang := &lang
+	const langFlagName = "lang"
+	const defLang = "en-GB"
+	const langUsage = "lang defines the language"
+	rootCommand.PersistentFlags().StringVar(bindToLang, langFlagName, defLang, langUsage)
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCommand.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	const toggleFlagName = "toggle"
+	const toggleShort = "t"
+	const toggleUsage = "Help message for toggle"
+	rootCommand.Flags().BoolP(toggleFlagName, toggleShort, false, toggleUsage)
 }
 
 // initConfig reads in config file and ENV variables if set.
