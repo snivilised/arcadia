@@ -19,23 +19,22 @@ const (
 	ScribbleFormatEn
 )
 
-var OutputFormatEnumInfo = assistant.NewEnumInfo(assistant.AcceptableEnumValues[OutputFormatEnum]{
-	XmlFormatEn:      []string{"xml", "x"},
-	JsonFormatEn:     []string{"json", "j"},
-	TextFormatEn:     []string{"text", "tx"},
-	ScribbleFormatEn: []string{"scribble", "scribbler", "scr"},
-})
-var OutputFormatEn assistant.EnumValue[OutputFormatEnum]
-
 type WidgetParameterSet struct {
 	Directory string
 	Format    OutputFormatEnum
 	Concise   bool
 	Pattern   string
 	Threshold uint
+
+	// the following are supporting fields required for widget command
+	//
+	OutputFormatEnumInfo *assistant.EnumInfo[OutputFormatEnum]
+	OutputFormatEn       assistant.EnumValue[OutputFormatEnum]
 }
 
-func init() {
+func BuildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
+	// to test: arcadia widget -d ./some-existing-file -p "P?<date>" -t 30
+	//
 	widgetCommand := &cobra.Command{
 		Use:   "widget",
 		Short: "widget sub command",
@@ -43,14 +42,14 @@ func init() {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var appErr error = nil
 
-			ps := Container.MustGetParamSet("widget-ps").(*assistant.ParamSet[WidgetParameterSet])
+			ps := container.MustGetParamSet("widget-ps").(*assistant.ParamSet[WidgetParameterSet])
 
 			if err := ps.Validate(); err == nil {
 				native := ps.Native
 
 				// rebind enum into native member
 				//
-				native.Format = OutputFormatEn.Value()
+				native.Format = native.OutputFormatEn.Value()
 
 				// optionally invoke cross field validation
 				//
@@ -91,12 +90,20 @@ func init() {
 		},
 	)
 
-	OutputFormatEn = OutputFormatEnumInfo.NewValue()
+	paramSet.Native.OutputFormatEnumInfo = assistant.NewEnumInfo(assistant.AcceptableEnumValues[OutputFormatEnum]{
+		XmlFormatEn:      []string{"xml", "x"},
+		JsonFormatEn:     []string{"json", "j"},
+		TextFormatEn:     []string{"text", "tx"},
+		ScribbleFormatEn: []string{"scribble", "scribbler", "scr"},
+	})
+
+	paramSet.Native.OutputFormatEn = paramSet.Native.OutputFormatEnumInfo.NewValue()
+
 	paramSet.BindValidatedEnum(
 		assistant.NewFlagInfo("format", "f", "xml"),
-		&OutputFormatEn.Source,
+		&paramSet.Native.OutputFormatEn.Source,
 		func(value string) error {
-			if OutputFormatEnumInfo.En(value) == XmlFormatEn {
+			if paramSet.Native.OutputFormatEnumInfo.En(value) == XmlFormatEn {
 				return nil
 			}
 			return fmt.Errorf("only xml format is currently supported, other formats available in future release")
@@ -134,7 +141,8 @@ func init() {
 		&paramSet.Native.Threshold,
 		lo, hi,
 	)
+	container.MustRegisterRootedCommand(widgetCommand)
+	container.MustRegisterParamSet("widget-ps", paramSet)
 
-	Container.MustRegisterRootedCommand(widgetCommand)
-	Container.MustRegisterParamSet("widget-ps", paramSet)
+	return widgetCommand
 }
