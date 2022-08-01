@@ -123,13 +123,14 @@ func init() {
 			return fmt.Errorf("pattern is invalid, missing mandatory capture groups ('date' or 'd', 'm', and 'y')")
 		},
 	)
-	widgetCommand.MarkFlagRequired("pattern")
+	_ = widgetCommand.MarkFlagRequired("pattern")
 
 	const lo = uint(25)
 	const hi = uint(50)
+	const def = uint(10)
 
 	paramSet.BindValidatedUintWithin(
-		assistant.NewFlagInfo("threshold", "t", uint(10)),
+		assistant.NewFlagInfo("threshold", "t", def),
 		&paramSet.Native.Threshold,
 		lo, hi,
 	)

@@ -83,6 +83,10 @@ tasks:
   gen:
     cmds:
       - ginkgo generate {{.CLI_ARGS}}
+
+  lint:
+    cmds:
+      - golangci-lint run
  
   # currently, this is hardcoded for windows
   #
