@@ -1,10 +1,12 @@
 {
   "could-not-load-translation-file.arcadia": {
     "description": "Could not load translation file for this language.",
+    "hash": "sha1-e588cb43b08564e872ac879b1dce92fb606018ce",
     "other": "could not load translation file for language '{{.Language}}' ({{.FullPath}})"
   },
   "language-not-supported.arcadia": {
     "description": "The language specified is not supported; no translations for this language.",
+    "hash": "sha1-fd33f3e597c158b9bbd614e98b3dbd7c4abda700",
     "other": "language '{{.Language}}' not supported"
   }
 }

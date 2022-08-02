@@ -19,3 +19,18 @@ func (td LanguageNotSupportedTemplData) Message() *i18n.Message {
 		Other:       "language '{{.Language}}' not supported",
 	}
 }
+
+// could not load translation file
+//
+type CouldNotLoadTranslationFileTemplData struct {
+	Language string
+	FullPath string
+}
+
+func (td CouldNotLoadTranslationFileTemplData) Message() *i18n.Message {
+	return &i18n.Message{
+		ID:          "could-not-load-translation-file.arcadia",
+		Description: "Could not load translation file for this language.",
+		Other:       "could not load translation file for language '{{.Language}}' ({{.FullPath}})",
+	}
+}

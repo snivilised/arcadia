@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/snivilised/arcadia/src/internal/translate"
 	"github.com/snivilised/cobrass/src/assistant"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"golang.org/x/text/language"
 )
 
 type bootstrap struct {
@@ -14,6 +16,8 @@ type bootstrap struct {
 }
 
 func (b *bootstrap) execute() {
+	// all these string literals here should be made translateable
+	//
 	b.container = assistant.NewCobraContainer(
 		&cobra.Command{
 			Use:   "main",
@@ -31,13 +35,31 @@ func (b *bootstrap) execute() {
 		},
 	)
 
-	setupRootCommand(b.container)
-	BuildWidgetCommand(b.container)
+	// we have to initialise translation as soon as possible, even if it
+	// is in the wrong language, which won't be resolved until after
+	// configure has been invoked and language override if defined has
+	// been read in.
+	//
+	translate.Initialise(func(o *translate.LanguageInitOptions) {
+		o.App = ApplicationName
+	})
 
+	setupRootCommand(b.container)
+	buildWidgetCommand(b.container)
 	configure(b.container)
 
-	root := b.container.Root()
+	if viper.InConfig("lang") {
+		lang := viper.GetString("lang")
+		tag, err := language.Parse(lang)
 
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		_ = translate.UseTag(tag)
+	}
+
+	root := b.container.Root()
 	err := root.Execute()
 	if err != nil {
 		os.Exit(1)

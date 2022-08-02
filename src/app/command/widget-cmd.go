@@ -32,7 +32,7 @@ type WidgetParameterSet struct {
 	OutputFormatEn       assistant.EnumValue[OutputFormatEnum]
 }
 
-func BuildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
+func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 	// to test: arcadia widget -d ./some-existing-file -p "P?<date>" -t 30
 	//
 	widgetCommand := &cobra.Command{
