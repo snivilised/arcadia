@@ -35,7 +35,7 @@ var _ = Describe("i18n", Ordered, func() {
 			})
 
 			It("🧪 should: localise in requested non default language", func() {
-				translate.UseTag(language.AmericanEnglish)
+				_ = translate.UseTag(language.AmericanEnglish)
 				data := l10n.LanguageNotSupportedTemplData{
 					Language: us,
 				}
