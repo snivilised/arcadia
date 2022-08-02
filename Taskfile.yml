@@ -5,7 +5,8 @@ dotenv: ['.env']
 
 vars:
   BINARY_NAME: arcadia
-  BUILD_EXE: "tbd"
+  TRANSLATIONS_DIR: ./src/internal/l10n/out
+  TRANSLATION_US: arcadia.active.en-US.json
 
 tasks:
   build_generic:
@@ -95,13 +96,16 @@ tasks:
       BINARY_EXT: .exe
       TARGET_OS: windows
       DEPLOY_BINARY: ./dist/{{.TARGET_OS}}/{{.BINARY_NAME}}{{.BINARY_EXT}}
+      DEPLOY_US: ./src/internal/l10n/out/{{.TRANSLATION_US}}
 
     cmds:
       - echo "deploying to location (.env) DEPLOY_TO  ==> '$DEPLOY_TO'"
       - /bin/cp -f {{.DEPLOY_BINARY}} $DEPLOY_TO
+      - /bin/cp -f {{.TRANSLATIONS_DIR}}/{{.TRANSLATION_US}} $DEPLOY_TO
 
     generates:
       - $DEPLOY_TO/{{.DEPLOY_BINARY}}
+      - $DEPLOY_TO/{{.TRANSLATION_US}}
 
     preconditions:
       - test $DEPLOY_TO
