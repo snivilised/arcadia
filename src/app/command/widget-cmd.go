@@ -32,6 +32,8 @@ type WidgetParameterSet struct {
 	OutputFormatEn       assistant.EnumValue[OutputFormatEnum]
 }
 
+const WIDGET_PSNAME = "widget-ps"
+
 func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 	// to test: arcadia widget -d ./some-existing-file -p "P?<date>" -t 30
 	//
@@ -42,7 +44,15 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var appErr error = nil
 
-			ps := container.MustGetParamSet("widget-ps").(*assistant.ParamSet[WidgetParameterSet])
+			// check for alternative config file setting
+			//
+			if rps := container.MustGetParamSet(ROOT_PSNAME).(*assistant.ParamSet[RootParameterSet]); rps.Native.ConfigFile != "" {
+				configure(func(co *configureOptions) {
+					*co.confileFile = rps.Native.ConfigFile
+				})
+			}
+
+			ps := container.MustGetParamSet(WIDGET_PSNAME).(*assistant.ParamSet[WidgetParameterSet])
 
 			if err := ps.Validate(); err == nil {
 				native := ps.Native
@@ -60,7 +70,7 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 					}
 					return fmt.Errorf("format: '%v' is invalid", ps.Format)
 				}); xv == nil {
-					fmt.Printf("%v %v Running widget\n", AppEmoji, ApplicationName)
+					fmt.Printf("%v %v Running widget\n", APP_EMOJI, APPLICATION_NAME)
 					// ---> execute application core with the parameter set (native)
 					//
 					// appErr = runApplication(native)
@@ -139,17 +149,23 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 	)
 	_ = widgetCommand.MarkFlagRequired("pattern")
 
-	const lo = uint(25)
-	const hi = uint(50)
-	const def = uint(10)
+	const LO = uint(25)
+	const HI = uint(50)
+	const DEF = uint(10)
 
 	paramSet.BindValidatedUintWithin(
-		assistant.NewFlagInfo("threshold", "t", def),
+		assistant.NewFlagInfo("threshold", "t", DEF),
 		&paramSet.Native.Threshold,
-		lo, hi,
+		LO, HI,
 	)
+
+	// If you want to disable the widget command but keep it in the project for reference
+	// purposes, then simply comment out the following 2 register calls:
+	// (Warning, this may just create dead code and result in lint failure so tread
+	// carefully.)
+	//
 	container.MustRegisterRootedCommand(widgetCommand)
-	container.MustRegisterParamSet("widget-ps", paramSet)
+	container.MustRegisterParamSet(WIDGET_PSNAME, paramSet)
 
 	return widgetCommand
 }

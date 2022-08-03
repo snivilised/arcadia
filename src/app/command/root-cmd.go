@@ -12,16 +12,16 @@ import (
 	"golang.org/x/text/language"
 )
 
-const AppEmoji = "🦄"
-const ApplicationName = "arcadia"
-const RootPsName = "root-ps"
+const APP_EMOJI = "🦄"
+const APPLICATION_NAME = "arcadia"
+const ROOT_PSNAME = "root-ps"
 
 func Execute() {
 	bs := Bootstrap{}
 	bs.Execute(func(detector LocaleDetector) []string {
 		translate.Initialise(func(o *translate.LanguageInitOptions) {
 			o.Detected = detector.Scan()
-			o.App = ApplicationName
+			o.App = APPLICATION_NAME
 		})
 		return nil
 	})
@@ -38,28 +38,20 @@ func setupRootCommand(container *assistant.CobraContainer) {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	const configFlagName = "config"
-	const defConfig = ""
-	configUsage := fmt.Sprintf("config file (default is $HOME/.%v.yml", ApplicationName)
-
 	root := container.Root()
 	paramSet := assistant.NewParamSet[RootParameterSet](root)
 
 	paramSet.BindString(&assistant.FlagInfo{
-		Name:               configFlagName,
-		Usage:              configUsage,
-		Default:            defConfig,
+		Name:               "config",
+		Usage:              fmt.Sprintf("config file (default is $HOME/.%v.yml", APPLICATION_NAME),
+		Default:            "",
 		AlternativeFlagSet: root.PersistentFlags(),
 	}, &paramSet.Native.ConfigFile)
 
-	const langFlagName = "lang"
-	const defLang = "en-GB"
-	const langUsage = "lang defines the language"
-
 	paramSet.BindValidatedString(&assistant.FlagInfo{
-		Name:               langFlagName,
-		Usage:              langUsage,
-		Default:            defLang,
+		Name:               "lang",
+		Usage:              "lang defines the language",
+		Default:            "en-GB",
 		AlternativeFlagSet: root.PersistentFlags(),
 	}, &paramSet.Native.Language, func(value string) error {
 		_, err := language.Parse(value)
@@ -68,13 +60,13 @@ func setupRootCommand(container *assistant.CobraContainer) {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	const toggleShort = "t"
-	const toggleUsage = "toggle Help message for toggle"
+	const TOGGLE_SHORT = "t"
+	const TOGGLE_USAGE = "toggle Help message for toggle"
 
 	paramSet.BindBool(
-		assistant.NewFlagInfo(toggleUsage, toggleShort, false),
+		assistant.NewFlagInfo(TOGGLE_USAGE, TOGGLE_SHORT, false),
 		&paramSet.Native.Toggle,
 	)
 
-	container.MustRegisterParamSet(RootPsName, paramSet)
+	container.MustRegisterParamSet(ROOT_PSNAME, paramSet)
 }

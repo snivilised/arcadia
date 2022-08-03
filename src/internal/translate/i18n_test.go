@@ -27,7 +27,7 @@ var _ = Describe("i18n", Ordered, func() {
 		directory, _ := filepath.Abs("../../internal/l10n/out")
 		translate.Initialise(func(o *translate.LanguageInitOptions) {
 			o.Detected = language.BritishEnglish
-			o.App = command.ApplicationName
+			o.App = command.APPLICATION_NAME
 			o.Path = directory
 		})
 	})
@@ -37,7 +37,7 @@ var _ = Describe("i18n", Ordered, func() {
 			It("🧪 should: not return error", func() {
 				translate.Initialise(func(o *translate.LanguageInitOptions) {
 					o.Detected = language.AmericanEnglish
-					o.App = command.ApplicationName
+					o.App = command.APPLICATION_NAME
 					o.Path = "../l10n/out/"
 				})
 

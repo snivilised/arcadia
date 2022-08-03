@@ -46,6 +46,7 @@ func (b *Bootstrap) Execute(initialise func(LocaleDetector) []string) {
 		b.Detector = &Jabber{}
 	}
 	args := initialise(b.Detector)
+	configure()
 
 	// all these string literals here should be made translateable
 	//
@@ -68,7 +69,6 @@ func (b *Bootstrap) Execute(initialise func(LocaleDetector) []string) {
 
 	setupRootCommand(b.container)
 	buildWidgetCommand(b.container)
-	configure(b.container)
 
 	root := b.container.Root()
 	var err error
@@ -89,21 +89,25 @@ func (b *Bootstrap) Execute(initialise func(LocaleDetector) []string) {
 	}
 }
 
-func configure(container *assistant.CobraContainer) {
-	// configure only needs container so that it can get hold of the ConfigFile
-	//
-	// This is the functionality previously defined in initConfig, which was
-	// invoked as a result of it be passed into cobra.OnInitialize(). This
-	// approach was abandoned due to its reliance on global state and the init()
-	// function which is an anti-pattern.
-	//
+type configureOptions struct {
+	confileFile *string
+}
 
-	// initConfig reads in config file and ENV variables if set.
-	paramSet := container.MustGetParamSet(RootPsName).(*assistant.ParamSet[RootParameterSet])
+type ConfigureOptionFn func(*configureOptions)
 
-	if paramSet.Native.ConfigFile != "" {
+func configure(options ...ConfigureOptionFn) {
+	var configFile string
+
+	o := configureOptions{
+		confileFile: &configFile,
+	}
+	for _, fo := range options {
+		fo(&o)
+	}
+
+	if configFile != "" {
 		// Use config file from the flag.
-		viper.SetConfigFile(paramSet.Native.ConfigFile)
+		viper.SetConfigFile(configFile)
 	} else {
 		// Find home directory.
 		home, err := os.UserHomeDir()
@@ -114,7 +118,7 @@ func configure(container *assistant.CobraContainer) {
 		//
 		viper.AddConfigPath(home)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(fmt.Sprintf(".%v", ApplicationName))
+		viper.SetConfigName(fmt.Sprintf(".%v", APPLICATION_NAME))
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
@@ -124,6 +128,10 @@ func configure(container *assistant.CobraContainer) {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
 
+	handleLangSetting()
+}
+
+func handleLangSetting() {
 	if viper.InConfig("lang") {
 		lang := viper.GetString("lang")
 		tag, err := language.Parse(lang)
