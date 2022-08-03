@@ -76,11 +76,18 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 		},
 	}
 
+	defaultDirectory := "/foo-bar"
+
 	paramSet := assistant.NewParamSet[WidgetParameterSet](widgetCommand)
 	paramSet.BindValidatedString(
-		assistant.NewFlagInfo("directory", "d", "/foo-bar"),
+		assistant.NewFlagInfo("directory", "d", defaultDirectory),
 		&paramSet.Native.Directory,
 		func(value string) error {
+			// ideally, we should check if the Flag has been explicitly set
+			//
+			if value == defaultDirectory {
+				return nil
+			}
 			if _, err := os.Stat(value); err != nil {
 				if os.IsNotExist(err) {
 					return err

@@ -49,6 +49,8 @@ As the template is instantiated from github, the new name will automatically rep
 
 + `github actions workflow`: If the client application needs to use github actions for continuous integration, then the name of the [workflow](.github/workflows/ci-workflow.yml) needs to be changed. If not, then the workflow file should be deleted
 + `remove the dummy code`: __widget-cmd.go__, __greeting.go__ and its associated test __greeting_test.go__ (but only do this once new valid tests are ready to replace it, to avoid references being removed after _go mod tidy_)
++ `replace bootstrap testcase`: There is a test case which by default is set to invoke the __widget__ command. When the user is ready to remove this command, then the corresponding test case should be modified to invoke another command with appropriate parameters. This test case is there to ensure that the ___bootstrapping___ process works, as opposed to checking the validatity of the command itself.
+
 + `change ApplicationName`: modify to reflect the new paplication name. This application name is incorporated into the name of any translation files to be loaded.
 + `replace README content`
 + `review bootstrap.go`: this will need to be modified to invoke creation of any custom commands. The `execute` method of __bootstrap__ should be modified to invoke command builder. Refer to the `widget` command to see how this is done.
@@ -67,11 +69,11 @@ Make sure that the go-i18n package has been installed so that it can be invoked 
 To maintan localisation of the application, the user must take care to implement all steps to ensure translatablity of all user facing messages. Whenever there is a need to add/change user facing messages including error messages, to maintain this state, the user must:
 
 - define template struct (__xxxTemplData__) in __src/internal/l10n/messages.go__ and corresponding __Message()__ method. All messages are defined here in the same location, simplifying the message extraction process as all extractable strings occur at the same place. Please see [go-i18n](https://github.com/nicksnyder/go-i18n) for all translation/pluralisation options and other regional sensitive content.
-- define a corresponding helper function in __src/internal/translate/messages.go__. These helper functions are the ones that the rest of the application will use in order to generate use facing string content.
+- define a corresponding helper function in __src/internal/translate/messages.go__. These helper functions are the ones that the rest of the application will use in order to generate region sensitive user facing string content.
 - cd to the ___l10n___ at __src/internal/l10n/__
 - run `goi18n extract -format json`, this will create an updated __active.en.json__ file
 - run `goi18n merge -outdir out -format json active.en.json translate.en-US.json`
-- rename __out/active.en-US.json__ to __out/arcadia.active.en-US.json__. The name __arcadia__ should be changed to the name of the new app (which should correspond with `ApplicationName` defined in__src/app/command/root-cmd.go__).
+- rename __out/active.en-US.json__ to __out/arcadia.active.en-US.json__. The name __arcadia__ should be changed to the name of the new app (which should correspond with `ApplicationName` defined in __src/app/command/root-cmd.go__).
 
 The file __out/arcadia.active.en-US.json__ is the translation file that will be deployed with the executable. Of course, if you want to use a config file format other than `json`, then there will be a little more work to do, but is fairly straight forward.
 
@@ -87,6 +89,12 @@ NB: the `deploy` task has been set up for windows by default, but can be changed
 
 Check that the executable and the US language file __arcadia.active.en-US.json__ have both been deployed. Then invoke the widget command with something like
 
-> arcadia widget -d .\deploy-to.txt -p "P?<date>" -t 30
+> arcadia widget -p "P?\<date\>" -t 30
 
-The file '.\deploy-to.txt' should be changed to any file that exists. Since the `widget` command uses `Cobrass` option validation to check that the file specified exists, the app will fail if the file does not exist. This serves as an example of how to implement option validation with `Cobrass`.
+Optionally, the user can also specify the ___directory___ flag:
+
+> arcadia widget -p "P?\<date\>" -t 30 -d foo-bar.txt
+
+... where ___foo-bar.txt___ should be replaced with a file that actually exists.
+
+Since the `widget` command uses `Cobrass` option validation to check that the file specified exists, the app will fail if the file does not exist. This serves as an example of how to implement option validation with `Cobrass`.

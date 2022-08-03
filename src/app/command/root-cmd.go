@@ -7,16 +7,24 @@ package command
 import (
 	"fmt"
 
+	"github.com/snivilised/arcadia/src/internal/translate"
 	"github.com/snivilised/cobrass/src/assistant"
 	"golang.org/x/text/language"
 )
 
 const AppEmoji = "🦄"
 const ApplicationName = "arcadia"
+const RootPsName = "root-ps"
 
 func Execute() {
-	bs := bootstrap{}
-	bs.execute()
+	bs := Bootstrap{}
+	bs.Execute(func(detector LocaleDetector) []string {
+		translate.Initialise(func(o *translate.LanguageInitOptions) {
+			o.Detected = detector.Scan()
+			o.App = ApplicationName
+		})
+		return nil
+	})
 }
 
 type RootParameterSet struct {
@@ -68,5 +76,5 @@ func setupRootCommand(container *assistant.CobraContainer) {
 		&paramSet.Native.Toggle,
 	)
 
-	container.MustRegisterParamSet("root-ps", paramSet)
+	container.MustRegisterParamSet(RootPsName, paramSet)
 }
