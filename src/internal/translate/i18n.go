@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cubiest/jibberjabber"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/samber/lo"
 	"github.com/snivilised/arcadia/src/internal/l10n"
@@ -17,6 +16,10 @@ var languages *LanguageInfo
 var localiser *i18n.Localizer
 
 type LanguageInitOptions struct {
+	// Detected langauge tag
+	//
+	Detected language.Tag
+
 	// App name
 	//
 	App string
@@ -82,10 +85,6 @@ type LanguageInfo struct {
 	//
 	Detected language.Tag
 
-	// Territory reflects the region as automatically detected.
-	//
-	Territory string
-
 	// Current reflects the language currently in force. Will by default be the detected
 	// language. Client can change this with the UseTag function.
 	//
@@ -126,33 +125,17 @@ func GetLocaliser() *i18n.Localizer {
 	return localiser
 }
 
-type detectInfo struct {
-	tag       language.Tag
-	territory string
-}
-
-func detect() *detectInfo {
-	detectedLang, _ := jibberjabber.DetectLanguage()
-	territory, _ := jibberjabber.DetectTerritory()
-
-	detectedLangTag, _ := language.Parse(fmt.Sprintf("%v-%v", detectedLang, territory))
-
-	return &detectInfo{
-		tag:       detectedLangTag,
-		territory: territory,
-	}
-}
-
 func createInitialLanguageInfo(options LanguageInitOptions) *LanguageInfo {
-	dInfo := detect()
 
 	return &LanguageInfo{
-		App:       options.App,
-		Path:      options.Path,
-		Default:   language.BritishEnglish,
-		Detected:  dInfo.tag,
-		Territory: dInfo.territory,
-		Current:   dInfo.tag,
+		App:      options.App,
+		Path:     options.Path,
+		Default:  language.BritishEnglish,
+		Detected: options.Detected,
+		Current:  options.Detected,
+
+		// TODO: this has to be read in from config
+		//
 		Supported: []language.Tag{language.BritishEnglish, language.AmericanEnglish},
 	}
 }
@@ -164,9 +147,8 @@ func createIncrementalLanguageInfo(requested language.Tag, existing *LanguageInf
 		Path:      existing.Path,
 		Default:   language.BritishEnglish,
 		Detected:  existing.Detected,
-		Territory: existing.Territory,
 		Current:   requested,
-		Supported: []language.Tag{language.BritishEnglish, language.AmericanEnglish},
+		Supported: existing.Supported,
 	}
 }
 
@@ -185,7 +167,11 @@ func createLocaliser(li *LanguageInfo) *i18n.Localizer {
 		_, err := bundle.LoadMessageFile(path)
 
 		if err != nil {
-			panic(fmt.Errorf(GetCouldNotLoadTranslationFileErrorMessage(li.Current, path)))
+			// Since, translations failed to load, we will ever be in a situation where
+			// this error message is able to be generated in translated form, so
+			// we are force to generated an error message in the default language.
+			//
+			panic(fmt.Errorf("could not load translations for '%v', from: '%v'", li.Current, path))
 		}
 	}
 

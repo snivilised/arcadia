@@ -6,14 +6,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func ExecuteCommand(
-	root *cobra.Command, args ...string) (output string, err error) {
+func ExecuteCommand(root *cobra.Command, args ...string) (output string, err error) {
 	_, output, err = ExecuteCommandC(root, args...)
 	return output, err
 }
 
-func ExecuteCommandC(
-	root *cobra.Command, args ...string) (c *cobra.Command, output string, err error) {
+func ExecuteCommandC(root *cobra.Command, args ...string) (c *cobra.Command, output string, err error) {
 	buf := new(bytes.Buffer)
 	root.SetOut(buf)
 	root.SetErr(buf)

@@ -1,9 +1,11 @@
 package command
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 
+	"github.com/cubiest/jibberjabber"
 	"github.com/snivilised/arcadia/src/internal/translate"
 	"github.com/snivilised/cobrass/src/assistant"
 	"github.com/spf13/cobra"
@@ -11,11 +13,40 @@ import (
 	"golang.org/x/text/language"
 )
 
-type bootstrap struct {
+type LocaleDetector interface {
+	Scan() language.Tag
+}
+
+// Jabber is a LocaleDetector implemented using jibberjabber
+//
+type Jabber struct {
+}
+
+// Scan returns the detected language tag
+//
+func (j *Jabber) Scan() language.Tag {
+	lang, _ := jibberjabber.DetectIETF()
+	return language.MustParse(lang)
+}
+
+// Bootstrap represents construct that performs start up of the cli without resorting to
+// the use of Go's init() mechanism and minimal use of package global variables
+//
+type Bootstrap struct {
+	Detector  LocaleDetector
 	container *assistant.CobraContainer
 }
 
-func (b *bootstrap) execute() {
+// Execute runs the bootstrap. This is typically invoked from the root command, which
+// typically initialises the translate package.
+//
+func (b *Bootstrap) Execute(initialise func(LocaleDetector) []string) {
+
+	if b.Detector == nil {
+		b.Detector = &Jabber{}
+	}
+	args := initialise(b.Detector)
+
 	// all these string literals here should be made translateable
 	//
 	b.container = assistant.NewCobraContainer(
@@ -35,38 +66,32 @@ func (b *bootstrap) execute() {
 		},
 	)
 
-	// we have to initialise translation as soon as possible, even if it
-	// is in the wrong language, which won't be resolved until after
-	// configure has been invoked and language override if defined has
-	// been read in.
-	//
-	translate.Initialise(func(o *translate.LanguageInitOptions) {
-		o.App = ApplicationName
-	})
-
 	setupRootCommand(b.container)
 	buildWidgetCommand(b.container)
 	configure(b.container)
 
-	if viper.InConfig("lang") {
-		lang := viper.GetString("lang")
-		tag, err := language.Parse(lang)
+	root := b.container.Root()
+	var err error
 
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		_ = translate.UseTag(tag)
+	if args != nil {
+		buf := new(bytes.Buffer)
+		root.SetOut(buf)
+		root.SetErr(buf)
+		root.SetArgs(args)
+
+		_, err = root.ExecuteC()
+	} else {
+		err = root.Execute()
 	}
 
-	root := b.container.Root()
-	err := root.Execute()
 	if err != nil {
 		os.Exit(1)
 	}
 }
 
 func configure(container *assistant.CobraContainer) {
+	// configure only needs container so that it can get hold of the ConfigFile
+	//
 	// This is the functionality previously defined in initConfig, which was
 	// invoked as a result of it be passed into cobra.OnInitialize(). This
 	// approach was abandoned due to its reliance on global state and the init()
@@ -74,7 +99,7 @@ func configure(container *assistant.CobraContainer) {
 	//
 
 	// initConfig reads in config file and ENV variables if set.
-	paramSet := container.MustGetParamSet("root-ps").(*assistant.ParamSet[RootParameterSet])
+	paramSet := container.MustGetParamSet(RootPsName).(*assistant.ParamSet[RootParameterSet])
 
 	if paramSet.Native.ConfigFile != "" {
 		// Use config file from the flag.
@@ -97,5 +122,16 @@ func configure(container *assistant.CobraContainer) {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+	}
+
+	if viper.InConfig("lang") {
+		lang := viper.GetString("lang")
+		tag, err := language.Parse(lang)
+
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		_ = translate.UseTag(tag)
 	}
 }

@@ -2,6 +2,7 @@ package translate_test
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	. "github.com/onsi/ginkgo/v2"
@@ -14,21 +15,32 @@ import (
 
 var _ = Describe("i18n", Ordered, func() {
 
-	var es, us, expected string
+	var (
+		es, us, expected string
+	)
 
 	BeforeAll(func() {
 		es = language.Spanish.String()
 		us = language.AmericanEnglish.String()
 		expected = fmt.Sprintf("language '%v' not supported", es)
+
+		directory, _ := filepath.Abs("../../internal/l10n/out")
 		translate.Initialise(func(o *translate.LanguageInitOptions) {
+			o.Detected = language.BritishEnglish
 			o.App = command.ApplicationName
-			o.Path = "../l10n/out/"
+			o.Path = directory
 		})
 	})
 
 	Context("UseTag", func() {
 		When("given: tag is supported", func() {
 			It("🧪 should: not return error", func() {
+				translate.Initialise(func(o *translate.LanguageInitOptions) {
+					o.Detected = language.AmericanEnglish
+					o.App = command.ApplicationName
+					o.Path = "../l10n/out/"
+				})
+
 				us := language.AmericanEnglish
 				Expect(translate.UseTag(us)).Error().To(BeNil())
 				Expect(translate.GetLanguageInfo().Current).To(Equal(us))
