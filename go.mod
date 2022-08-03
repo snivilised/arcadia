@@ -5,12 +5,15 @@ go 1.18
 require (
 	github.com/onsi/ginkgo/v2 v2.1.4
 	github.com/onsi/gomega v1.19.0
-	github.com/samber/lo v1.25.0
+	github.com/samber/lo v1.27.0
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.12.0
 )
 
-require golang.org/x/exp v0.0.0-20220713135740-79cabaa25d75 // indirect
+require (
+	github.com/onsi/ginkgo v1.16.5 // indirect
+	golang.org/x/exp v0.0.0-20220713135740-79cabaa25d75 // indirect
+)
 
 require (
 	github.com/cubiest/jibberjabber v1.0.1
