@@ -13,8 +13,8 @@ type OutputFormatEnum int
 
 const (
 	_ OutputFormatEnum = iota
-	XmlFormatEn
-	JsonFormatEn
+	XMLFormatEn
+	JSONFormatEn
 	TextFormatEn
 	ScribbleFormatEn
 )
@@ -32,7 +32,7 @@ type WidgetParameterSet struct {
 	OutputFormatEn       assistant.EnumValue[OutputFormatEnum]
 }
 
-const WIDGET_PSNAME = "widget-ps"
+const WidgetPsName = "widget-ps"
 
 func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 	// to test: arcadia widget -d ./some-existing-file -p "P?<date>" -t 30
@@ -46,13 +46,13 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 
 			// check for alternative config file setting
 			//
-			if rps := container.MustGetParamSet(ROOT_PSNAME).(*assistant.ParamSet[RootParameterSet]); rps.Native.ConfigFile != "" {
+			if rps := container.MustGetParamSet(RootPsName).(*assistant.ParamSet[RootParameterSet]); rps.Native.ConfigFile != "" { //nolint:errcheck // is Must call
 				configure(func(co *configureOptions) {
 					*co.confileFile = rps.Native.ConfigFile
 				})
 			}
 
-			ps := container.MustGetParamSet(WIDGET_PSNAME).(*assistant.ParamSet[WidgetParameterSet])
+			ps := container.MustGetParamSet(WidgetPsName).(*assistant.ParamSet[WidgetParameterSet]) //nolint:errcheck // is Must call
 
 			if err := ps.Validate(); err == nil {
 				native := ps.Native
@@ -64,13 +64,13 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 				// optionally invoke cross field validation
 				//
 				if xv := ps.CrossValidate(func(ps *WidgetParameterSet) error {
-					condition := (ps.Format == XmlFormatEn)
+					condition := (ps.Format == XMLFormatEn)
 					if condition {
 						return nil
 					}
 					return fmt.Errorf("format: '%v' is invalid", ps.Format)
 				}); xv == nil {
-					fmt.Printf("%v %v Running widget\n", APP_EMOJI, APPLICATION_NAME)
+					fmt.Printf("%v %v Running widget\n", AppEmoji, ApplicationName)
 					// ---> execute application core with the parameter set (native)
 					//
 					// appErr = runApplication(native)
@@ -108,8 +108,8 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 	)
 
 	paramSet.Native.OutputFormatEnumInfo = assistant.NewEnumInfo(assistant.AcceptableEnumValues[OutputFormatEnum]{
-		XmlFormatEn:      []string{"xml", "x"},
-		JsonFormatEn:     []string{"json", "j"},
+		XMLFormatEn:      []string{"xml", "x"},
+		JSONFormatEn:     []string{"json", "j"},
 		TextFormatEn:     []string{"text", "tx"},
 		ScribbleFormatEn: []string{"scribble", "scribbler", "scr"},
 	})
@@ -120,7 +120,7 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 		assistant.NewFlagInfo("format", "f", "xml"),
 		&paramSet.Native.OutputFormatEn.Source,
 		func(value string) error {
-			if paramSet.Native.OutputFormatEnumInfo.En(value) == XmlFormatEn {
+			if paramSet.Native.OutputFormatEnumInfo.En(value) == XMLFormatEn {
 				return nil
 			}
 			return fmt.Errorf("only xml format is currently supported, other formats available in future release")
@@ -147,16 +147,19 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 			return fmt.Errorf("pattern is invalid, missing mandatory capture groups ('date' or 'd', 'm', and 'y')")
 		},
 	)
+
 	_ = widgetCommand.MarkFlagRequired("pattern")
 
-	const LO = uint(25)
-	const HI = uint(50)
-	const DEF = uint(10)
+	const (
+		Lo  = uint(25)
+		Hi  = uint(50)
+		Def = uint(10)
+	)
 
 	paramSet.BindValidatedUintWithin(
-		assistant.NewFlagInfo("threshold", "t", DEF),
+		assistant.NewFlagInfo("threshold", "t", Def),
 		&paramSet.Native.Threshold,
-		LO, HI,
+		Lo, Hi,
 	)
 
 	// If you want to disable the widget command but keep it in the project for reference
@@ -165,7 +168,7 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 	// carefully.)
 	//
 	container.MustRegisterRootedCommand(widgetCommand)
-	container.MustRegisterParamSet(WIDGET_PSNAME, paramSet)
+	container.MustRegisterParamSet(WidgetPsName, paramSet)
 
 	return widgetCommand
 }
