@@ -6,23 +6,24 @@ import (
 	"os"
 
 	"github.com/cubiest/jibberjabber"
-	"github.com/snivilised/arcadia/src/internal/translate"
 	"github.com/snivilised/cobrass/src/assistant"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"golang.org/x/text/language"
+
+	"github.com/snivilised/arcadia/src/internal/translate"
 )
 
 type LocaleDetector interface {
 	Scan() language.Tag
 }
 
-// Jabber is a LocaleDetector implemented using jibberjabber
+// Jabber is a LocaleDetector implemented using jibberjabber.
 //
 type Jabber struct {
 }
 
-// Scan returns the detected language tag
+// Scan returns the detected language tag.
 //
 func (j *Jabber) Scan() language.Tag {
 	lang, _ := jibberjabber.DetectIETF()
@@ -30,7 +31,7 @@ func (j *Jabber) Scan() language.Tag {
 }
 
 // Bootstrap represents construct that performs start up of the cli without resorting to
-// the use of Go's init() mechanism and minimal use of package global variables
+// the use of Go's init() mechanism and minimal use of package global variables.
 //
 type Bootstrap struct {
 	Detector  LocaleDetector
@@ -41,11 +42,12 @@ type Bootstrap struct {
 // typically initialises the translate package.
 //
 func (b *Bootstrap) Execute(initialise func(LocaleDetector) []string) {
-
 	if b.Detector == nil {
 		b.Detector = &Jabber{}
 	}
+
 	args := initialise(b.Detector)
+
 	configure()
 
 	// all these string literals here should be made translateable
@@ -71,6 +73,7 @@ func (b *Bootstrap) Execute(initialise func(LocaleDetector) []string) {
 	buildWidgetCommand(b.container)
 
 	root := b.container.Root()
+
 	var err error
 
 	if args != nil {
@@ -118,7 +121,7 @@ func configure(options ...ConfigureOptionFn) {
 		//
 		viper.AddConfigPath(home)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(fmt.Sprintf(".%v", APPLICATION_NAME))
+		viper.SetConfigName(fmt.Sprintf(".%v", ApplicationName))
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
@@ -140,6 +143,7 @@ func handleLangSetting() {
 			fmt.Println(err)
 			os.Exit(1)
 		}
+
 		_ = translate.UseTag(tag)
 	}
 }

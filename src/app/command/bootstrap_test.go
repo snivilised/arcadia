@@ -8,14 +8,13 @@ import (
 	"golang.org/x/text/language"
 
 	"github.com/snivilised/arcadia/src/app/command"
-	_ "github.com/snivilised/arcadia/src/app/command"
 	"github.com/snivilised/arcadia/src/internal/translate"
 )
 
-type UsFake struct {
+type USFake struct {
 }
 
-func (j *UsFake) Scan() language.Tag {
+func (j *USFake) Scan() language.Tag {
 	return language.AmericanEnglish
 }
 
@@ -26,7 +25,7 @@ var _ = Describe("Bootstrap", func() {
 			directory, _ := filepath.Abs("../../internal/l10n/out")
 
 			bootstrap := command.Bootstrap{
-				Detector: &UsFake{},
+				Detector: &USFake{},
 			}
 			bootstrap.Execute(func(detector command.LocaleDetector) []string {
 				args := []string{"widget", "-p", "P?<date>", "-t", "30"}

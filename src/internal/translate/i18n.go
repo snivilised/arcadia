@@ -2,21 +2,23 @@ package translate
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/samber/lo"
-	"github.com/snivilised/arcadia/src/internal/l10n"
 	"golang.org/x/text/language"
+
+	"github.com/snivilised/arcadia/src/internal/l10n"
 )
 
 var languages *LanguageInfo
 var localiser *i18n.Localizer
 
 type LanguageInitOptions struct {
-	// Detected langauge tag
+	// Detected language tag
 	//
 	Detected language.Tag
 
@@ -35,7 +37,6 @@ type LanguageInitOptions struct {
 type LanguageInitOptionFn func(*LanguageInitOptions)
 
 func Initialise(options ...LanguageInitOptionFn) {
-
 	o := LanguageInitOptions{}
 	for _, fo := range options {
 		fo(&o)
@@ -107,26 +108,25 @@ func UseTag(tag language.Tag) error {
 		languages = createIncrementalLanguageInfo(tag, languages)
 		localiser = createLocaliser(languages)
 	} else {
-		return fmt.Errorf(GetLanguageNotSupportedErrorMessage(tag))
+		return errors.New(GetLanguageNotSupportedErrorMessage(tag))
 	}
 
 	return nil
 }
 
-// GetLanguageInfo gets LanguageInfo
+// GetLanguageInfo gets LanguageInfo.
 //
 func GetLanguageInfo() *LanguageInfo {
 	return languages
 }
 
-// GetLocaliser gets the current go-i18n localizer instance
+// GetLocaliser gets the current go-i18n localizer instance.
 //
 func GetLocaliser() *i18n.Localizer {
 	return localiser
 }
 
 func createInitialLanguageInfo(options LanguageInitOptions) *LanguageInfo {
-
 	return &LanguageInfo{
 		App:      options.App,
 		Path:     options.Path,
@@ -141,7 +141,6 @@ func createInitialLanguageInfo(options LanguageInitOptions) *LanguageInfo {
 }
 
 func createIncrementalLanguageInfo(requested language.Tag, existing *LanguageInfo) *LanguageInfo {
-
 	return &LanguageInfo{
 		App:       existing.App,
 		Path:      existing.Path,

@@ -7,10 +7,11 @@ import (
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"golang.org/x/text/language"
+
 	"github.com/snivilised/arcadia/src/app/command"
 	"github.com/snivilised/arcadia/src/internal/l10n"
 	"github.com/snivilised/arcadia/src/internal/translate"
-	"golang.org/x/text/language"
 )
 
 var _ = Describe("i18n", Ordered, func() {
@@ -27,7 +28,7 @@ var _ = Describe("i18n", Ordered, func() {
 		directory, _ := filepath.Abs("../../internal/l10n/out")
 		translate.Initialise(func(o *translate.LanguageInitOptions) {
 			o.Detected = language.BritishEnglish
-			o.App = command.APPLICATION_NAME
+			o.App = command.ApplicationName
 			o.Path = directory
 		})
 	})
@@ -37,7 +38,7 @@ var _ = Describe("i18n", Ordered, func() {
 			It("🧪 should: not return error", func() {
 				translate.Initialise(func(o *translate.LanguageInitOptions) {
 					o.Detected = language.AmericanEnglish
-					o.App = command.APPLICATION_NAME
+					o.App = command.ApplicationName
 					o.Path = "../l10n/out/"
 				})
 
