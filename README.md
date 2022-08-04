@@ -6,6 +6,7 @@
 [![Go report](https://goreportcard.com/badge/github.com/snivilised/arcadia)](https://goreportcard.com/report/github.com/snivilised/arcadia)
 [![Coverage Status](https://coveralls.io/repos/github/snivilised/arcadia/badge.svg?branch=master)](https://coveralls.io/github/snivilised/arcadia?branch=master&kill_cache=1)
 [![Arcadia Continuous Integration](https://github.com/snivilised/arcadia/actions/workflows/ci-workflow.yml/badge.svg)](https://github.com/snivilised/arcadia/actions/workflows/ci-workflow.yml)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
 <!-- MD013/Line Length -->
 <!-- MarkDownLint-disable MD013 -->
