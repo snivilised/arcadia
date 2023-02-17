@@ -7,7 +7,6 @@ type Localisable interface {
 }
 
 // language not supported.
-//
 type LanguageNotSupportedTemplData struct {
 	Language string
 }
@@ -21,7 +20,6 @@ func (td LanguageNotSupportedTemplData) Message() *i18n.Message {
 }
 
 // could not load translation file.
-//
 type CouldNotLoadTranslationFileTemplData struct {
 	Language string
 	FullPath string

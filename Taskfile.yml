@@ -51,6 +51,10 @@ tasks:
     cmds:
       - ginkgo -v --dry-run ./...
 
+  t:
+    cmds:
+      - go test ./...
+
   watchv:
     cmds:
       - ginkgo watch -v -r -p ./...

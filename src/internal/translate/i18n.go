@@ -33,7 +33,6 @@ type LanguageInitOptions struct {
 
 // ValidatorContainerOptionFn definition of a client defined function to
 // set ValidatorContainer options.
-//
 type LanguageInitOptionFn func(*LanguageInitOptions)
 
 func Initialise(options ...LanguageInitOptionFn) {
@@ -64,7 +63,6 @@ func Initialise(options ...LanguageInitOptionFn) {
 
 // LanguageInfo indicates information relating to current language. See members for
 // details.
-//
 type LanguageInfo struct {
 	// App name which forms part of the language filename
 	//
@@ -98,7 +96,6 @@ type LanguageInfo struct {
 
 // UseTag allows the client to change the language currently in use to a language
 // other than the one automatically detected.
-//
 func UseTag(tag language.Tag) error {
 	_, found := lo.Find(languages.Supported, func(t language.Tag) bool {
 		return t == tag
@@ -115,13 +112,11 @@ func UseTag(tag language.Tag) error {
 }
 
 // GetLanguageInfo gets LanguageInfo.
-//
 func GetLanguageInfo() *LanguageInfo {
 	return languages
 }
 
 // GetLocaliser gets the current go-i18n localizer instance.
-//
 func GetLocaliser() *i18n.Localizer {
 	return localiser
 }

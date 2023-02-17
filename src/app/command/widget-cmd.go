@@ -42,7 +42,7 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 		Short: "widget sub command",
 		Long:  "Long description of the widget command",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			var appErr error = nil
+			var appErr error
 
 			// check for alternative config file setting
 			//

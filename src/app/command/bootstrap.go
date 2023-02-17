@@ -19,12 +19,10 @@ type LocaleDetector interface {
 }
 
 // Jabber is a LocaleDetector implemented using jibberjabber.
-//
 type Jabber struct {
 }
 
 // Scan returns the detected language tag.
-//
 func (j *Jabber) Scan() language.Tag {
 	lang, _ := jibberjabber.DetectIETF()
 	return language.MustParse(lang)
@@ -32,7 +30,6 @@ func (j *Jabber) Scan() language.Tag {
 
 // Bootstrap represents construct that performs start up of the cli without resorting to
 // the use of Go's init() mechanism and minimal use of package global variables.
-//
 type Bootstrap struct {
 	Detector  LocaleDetector
 	container *assistant.CobraContainer
@@ -40,7 +37,6 @@ type Bootstrap struct {
 
 // Execute runs the bootstrap. This is typically invoked from the root command, which
 // typically initialises the translate package.
-//
 func (b *Bootstrap) Execute(initialise func(LocaleDetector) []string) {
 	if b.Detector == nil {
 		b.Detector = &Jabber{}
