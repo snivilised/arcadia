@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/onsi/ginkgo/v2 v2.8.3
-	github.com/onsi/gomega v1.27.0
+	github.com/onsi/gomega v1.27.1
 	github.com/samber/lo v1.37.0
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.15.0
