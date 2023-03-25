@@ -10,8 +10,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"golang.org/x/text/language"
-
-	"github.com/snivilised/arcadia/src/internal/translate"
 )
 
 type LocaleDetector interface {
@@ -46,7 +44,7 @@ func (b *Bootstrap) Execute(initialise func(LocaleDetector) []string) {
 
 	configure()
 
-	// all these string literals here should be made translateable
+	// all these string literals here should be made translate-able
 	//
 	b.container = assistant.NewCobraContainer(
 		&cobra.Command{
@@ -131,15 +129,15 @@ func configure(options ...ConfigureOptionFn) {
 }
 
 func handleLangSetting() {
-	if viper.InConfig("lang") {
-		lang := viper.GetString("lang")
-		tag, err := language.Parse(lang)
+	// if viper.InConfig("lang") {
+	// 	lang := viper.GetString("lang")
+	// 	tag, err := language.Parse(lang)
 
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		_ = translate.UseTag(tag)
-	}
+	// 	_ = translate.UseTag(tag)
+	// }
 }

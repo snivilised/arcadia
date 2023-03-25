@@ -1,4 +1,4 @@
-package translate_test
+package i18n_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestTranslate(t *testing.T) {
+func TestI18n(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Translate Suite")
+	RunSpecs(t, "I18n Suite")
 }
