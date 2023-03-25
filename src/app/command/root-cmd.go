@@ -7,23 +7,51 @@ import (
 	"fmt"
 
 	"github.com/snivilised/cobrass/src/assistant"
+	xi18n "github.com/snivilised/extendio/i18n"
 	"golang.org/x/text/language"
-
-	"github.com/snivilised/arcadia/src/internal/translate"
 )
 
-const AppEmoji = "🦄"
-const ApplicationName = "arcadia"
-const RootPsName = "root-ps"
+const (
+	AppEmoji        = "🦄"
+	ApplicationName = "arcadia"
+	RootPsName      = "root-ps"
+	SOURCE_ID       = "github.com/snivilised/arcadia"
+)
 
 func Execute() {
-	bs := Bootstrap{}
-	bs.Execute(func(detector LocaleDetector) []string {
-		translate.Initialise(func(o *translate.LanguageInitOptions) {
-			o.Detected = detector.Scan()
-			o.App = ApplicationName
+	bootstrap := Bootstrap{}
+
+	bootstrap.Execute(func(detector LocaleDetector) []string {
+
+		from := xi18n.LoadFrom{
+			// Path: "defaults to the exe path",
+			// however, you can change this to something
+			// else, perhaps you want them to be in ~/your-app/l10n
+			// depending on your install process.
+			//
+			Sources: xi18n.TranslationFiles{
+				SOURCE_ID: xi18n.TranslationSource{Name: ApplicationName},
+			},
+		}
+
+		// read settings from config if they are available there
+		// TODO: there is a problem here, config is not
+		// read in until after language is setup. This needs to be fixed
+		// in another issue.
+		//
+		err := xi18n.Use(func(uo *xi18n.UseOptions) {
+			uo.Tag = detector.Scan()
+			uo.From = from
 		})
-		return nil
+
+		if err != nil {
+			panic(err)
+		}
+
+		// TODO: we need to return the real args instead of these
+		//
+		args := []string{"widget", "-p", "P?<date>", "-t", "30"}
+		return args
 	})
 }
 

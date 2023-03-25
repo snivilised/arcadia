@@ -9,6 +9,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// TODO: remove this dummy command and replace with application/library
+// relevant alternative(s)
+
 type OutputFormatEnum int
 
 const (
