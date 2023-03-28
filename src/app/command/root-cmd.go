@@ -6,6 +6,7 @@ package command
 import (
 	"fmt"
 
+	"github.com/samber/lo"
 	"github.com/snivilised/cobrass/src/assistant"
 	xi18n "github.com/snivilised/extendio/i18n"
 	"golang.org/x/text/language"
@@ -18,31 +19,55 @@ const (
 	SOURCE_ID       = "github.com/snivilised/arcadia"
 )
 
-func Execute() error {
-	bootstrap := Bootstrap{}
+type ExecutionOptions struct {
+	Detector LocaleDetector
+	From     *xi18n.LoadFrom
+}
+
+type ExecutionOptionsFn func(o *ExecutionOptions)
+
+func Execute(setter ...ExecutionOptionsFn) error {
+	o := &ExecutionOptions{
+		Detector: &Jabber{},
+	}
+	if len(setter) > 0 {
+		setter[0](o)
+	}
+
+	bootstrap := Bootstrap{
+		Detector: o.Detector,
+	}
 
 	bootstrap.Execute(func(detector LocaleDetector) []string {
 
-		from := xi18n.LoadFrom{
-			// Path: "defaults to the exe path",
-			// however, you can change this to something
-			// else, perhaps you want them to be in ~/your-app/l10n
-			// depending on your install process.
-			//
-			Sources: xi18n.TranslationFiles{
-				SOURCE_ID: xi18n.TranslationSource{Name: ApplicationName},
+		from := lo.TernaryF(o.From != nil,
+			func() *xi18n.LoadFrom {
+				return o.From
 			},
-		}
+			func() *xi18n.LoadFrom {
+				return &xi18n.LoadFrom{
+					// Path: "defaults to the exe path",
+					// however, you can change this to something
+					// else, perhaps you want them to be in ~/your-app/l10n
+					// depending on your install process.
+					//
+					Sources: xi18n.TranslationFiles{
+						SOURCE_ID: xi18n.TranslationSource{Name: ApplicationName},
+					},
+				}
+			},
+		)
 
 		// read settings from config if they are available there
 		// TODO: there is a problem here, config is not
 		// read in until after language is setup. This needs to be fixed
 		// in another issue.
 		//
-		detected := detector.Scan()
+		defaultTag := xi18n.DefaultLanguage.Get()
+		detected := detect(detector, defaultTag)
 		err := xi18n.Use(func(uo *xi18n.UseOptions) {
 			uo.Tag = detected
-			uo.From = from
+			uo.From = *from
 		})
 
 		if err != nil {
@@ -64,6 +89,16 @@ func Execute() error {
 	})
 
 	return nil
+}
+
+func detect(detector LocaleDetector, defaultTag language.Tag) language.Tag {
+	result := detector.Scan()
+
+	if result == language.Und {
+		result = defaultTag
+	}
+
+	return result
 }
 
 type RootParameterSet struct {
