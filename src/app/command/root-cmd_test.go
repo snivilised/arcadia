@@ -8,7 +8,6 @@ import (
 )
 
 var _ = Describe("RootCmd", func() {
-
 	It("🧪 should: execute", func() {
 		Expect(command.Execute()).Error().To(BeNil())
 	})

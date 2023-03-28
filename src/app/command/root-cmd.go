@@ -39,7 +39,8 @@ func Execute() error {
 		// read in until after language is setup. This needs to be fixed
 		// in another issue.
 		//
-		detected := detector.Scan()
+		defaultTag := language.BritishEnglish
+		detected := detect(detector, defaultTag)
 		err := xi18n.Use(func(uo *xi18n.UseOptions) {
 			uo.Tag = detected
 			uo.From = from
@@ -64,6 +65,16 @@ func Execute() error {
 	})
 
 	return nil
+}
+
+func detect(detector LocaleDetector, defaultTag language.Tag) language.Tag {
+	result := detector.Scan()
+
+	if result == language.Und {
+		result = defaultTag
+	}
+
+	return result
 }
 
 type RootParameterSet struct {
