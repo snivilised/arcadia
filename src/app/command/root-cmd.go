@@ -18,7 +18,7 @@ const (
 	SOURCE_ID       = "github.com/snivilised/arcadia"
 )
 
-func Execute() {
+func Execute() error {
 	bootstrap := Bootstrap{}
 
 	bootstrap.Execute(func(detector LocaleDetector) []string {
@@ -39,8 +39,9 @@ func Execute() {
 		// read in until after language is setup. This needs to be fixed
 		// in another issue.
 		//
+		detected := detector.Scan()
 		err := xi18n.Use(func(uo *xi18n.UseOptions) {
-			uo.Tag = detector.Scan()
+			uo.Tag = detected
 			uo.From = from
 		})
 
@@ -49,10 +50,20 @@ func Execute() {
 		}
 
 		// TODO: we need to return the real args instead of these
+		// Actually, at the moment, this is a bit abstract because
+		// we're only defining a template here, not a real application.
+		// good dummy code can only be created once we've instantiated
+		// with a real repo and have a good idea what we can put here.
 		//
 		args := []string{"widget", "-p", "P?<date>", "-t", "30"}
+		fmt.Printf(
+			"🌲 Running root command with args: %v, with language: %v\n",
+			args, detected,
+		)
 		return args
 	})
+
+	return nil
 }
 
 type RootParameterSet struct {

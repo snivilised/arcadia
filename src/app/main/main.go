@@ -7,5 +7,5 @@ package main
 import "github.com/snivilised/arcadia/src/app/command"
 
 func main() {
-	command.Execute()
+	_ = command.Execute()
 }
