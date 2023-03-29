@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/samber/lo"
+	"github.com/snivilised/arcadia/src/i18n"
 	"github.com/snivilised/cobrass/src/assistant"
 	xi18n "github.com/snivilised/extendio/i18n"
 	"golang.org/x/text/language"
@@ -59,13 +60,17 @@ func Execute(setter ...ExecutionOptionsFn) error {
 		)
 
 		// read settings from config if they are available there
+		// You can change the default language to wha is appropriate
+		// as opposed to using the default defined in extendio.
+		//
 		// TODO: there is a problem here, config is not
 		// read in until after language is setup. This needs to be fixed
 		// in another issue.
 		//
 		defaultTag := xi18n.DefaultLanguage.Get()
 		detected := detect(detector, defaultTag)
-		err := xi18n.Use(func(uo *xi18n.UseOptions) {
+
+		err := i18n.Use(func(uo *xi18n.UseOptions) {
 			uo.Tag = detected
 			uo.From = *from
 		})

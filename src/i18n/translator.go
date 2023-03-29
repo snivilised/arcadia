@@ -1,7 +1,6 @@
 package i18n
 
 import (
-	"github.com/mohae/deepcopy"
 	"github.com/samber/lo"
 	xi18n "github.com/snivilised/extendio/i18n"
 	"github.com/snivilised/extendio/xfs/utils"
@@ -55,43 +54,22 @@ func Use(options ...xi18n.UseOptionFn) error {
 		return err
 	}
 
-	// ... but from here, we only need to manage translations for arcadia
-	// and since we're we don't have translation requirements for other
-	// dependencies, we only need to use the singular translator. The user
-	// of arcadia will need to change this if they need to use other extendio
-	// i18n compatible dependencies.
+	// The root command has specified the translation requirements
+	// so we just use what has been requested.
 	//
-
-	oc, ok := deepcopy.Copy(o).(*xi18n.UseOptions)
-	if !ok {
-		panic(FailedToCopyOptionsNativeError(o.Tag))
-	}
-	oc.From = xi18n.LoadFrom{
-		Path: o.From.Path,
-		Sources: xi18n.TranslationFiles{
-			// CLIENT-TODO: change the name of arcadia below
-			//
-			SOURCE_ID: xi18n.TranslationSource{Name: "arcadia"},
-		},
-	}
-
-	// Currently, the assumption is that the Path specified by the client will
-	// contain all the translations for all languages and all dependencies.
-	// (ie, they are not spread over different directories)
-	//
-	lang := xi18n.NewLanguageInfo(oc)
+	lang := xi18n.NewLanguageInfo(o)
 	if !containsLanguage(lang.Supported, o.Tag) {
 		return xi18n.NewLanguageNotAvailableNativeError(o.Tag)
 	}
 
-	// CLIENT-TODO: If the instantiating client wishes to provide more
-	// localizers for other dependencies, they should use the
-	// multi translator instead of the singular one as depicted
-	// below, then add those extra dependencies as additional
-	// sources. This of course assumes that a translation file
-	// file will be deployed for each dependency.
-	//
-	factory := xi18n.SingularTranslatorFactory{}
+	factory := lo.TernaryF(len(o.From.Sources) > 1,
+		func() xi18n.TranslatorFactory {
+			return &xi18n.MultiTranslatorFactory{}
+		},
+		func() xi18n.TranslatorFactory {
+			return &xi18n.SingularTranslatorFactory{}
+		},
+	)
 
 	tx = factory.New(lang)
 	TxRef = utils.NewRoProp(tx)
