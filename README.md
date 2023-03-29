@@ -8,6 +8,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/snivilised/arcadia/badge.svg?branch=master)](https://coveralls.io/github/snivilised/arcadia?branch=master&kill_cache=1)
 [![Arcadia Continuous Integration](https://github.com/snivilised/arcadia/actions/workflows/ci-workflow.yml/badge.svg)](https://github.com/snivilised/arcadia/actions/workflows/ci-workflow.yml)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![A B](https://img.shields.io/badge/commit-conventional-commits?style=flat)](https://www.conventionalcommits.org/)
 
 <!-- MD013/Line Length -->
 <!-- MarkDownLint-disable MD013 -->
@@ -17,6 +18,9 @@
 
 <!-- MD040/fenced-code-language: Fenced code blocks should have a language specified -->
 <!-- MarkDownLint-disable MD040 -->
+
+<!-- MD028/no-blanks-blockquote: Blank line inside blockquote -->
+<!-- MarkDownLint-disable MD028 -->
 
 <p align="left">
   <a href="https://go.dev"><img src="resources/images/go-logo-light-blue.png" width="50" /></a>
