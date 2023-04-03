@@ -3,9 +3,8 @@ module github.com/snivilised/arcadia
 go 1.19
 
 require (
-	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826
 	github.com/onsi/ginkgo/v2 v2.9.2
-	github.com/onsi/gomega v1.27.5
+	github.com/onsi/gomega v1.27.6
 	github.com/samber/lo v1.38.1
 	github.com/snivilised/extendio v0.1.10
 	github.com/spf13/cobra v1.6.1
