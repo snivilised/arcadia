@@ -51,7 +51,7 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 			//
 			if rps := container.MustGetParamSet(RootPsName).(*assistant.ParamSet[RootParameterSet]); rps.Native.ConfigFile != "" { //nolint:errcheck // is Must call
 				configure(func(co *configureOptions) {
-					*co.confileFile = rps.Native.ConfigFile
+					*co.configFile = rps.Native.ConfigFile
 				})
 			}
 
@@ -126,7 +126,9 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 			if paramSet.Native.OutputFormatEnumInfo.En(value) == XMLFormatEn {
 				return nil
 			}
-			return fmt.Errorf("only xml format is currently supported, other formats available in future release")
+			return fmt.Errorf(
+				"only xml format is currently supported, other formats available in future release",
+			)
 		},
 	)
 
@@ -147,7 +149,9 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 				return nil
 			}
 
-			return fmt.Errorf("pattern is invalid, missing mandatory capture groups ('date' or 'd', 'm', and 'y')")
+			return fmt.Errorf(
+				"pattern is invalid, missing mandatory capture groups ('date' or 'd', 'm', and 'y')",
+			)
 		},
 	)
 

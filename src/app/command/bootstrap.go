@@ -87,7 +87,7 @@ func (b *Bootstrap) Execute(initialise func(LocaleDetector) []string) {
 }
 
 type configureOptions struct {
-	confileFile *string
+	configFile *string
 }
 
 type ConfigureOptionFn func(*configureOptions)
@@ -96,7 +96,7 @@ func configure(options ...ConfigureOptionFn) {
 	var configFile string
 
 	o := configureOptions{
-		confileFile: &configFile,
+		configFile: &configFile,
 	}
 	for _, fo := range options {
 		fo(&o)
