@@ -13,11 +13,11 @@ import (
 	"golang.org/x/text/language"
 )
 
-type USFake struct {
+type DetectorStub struct {
 }
 
-func (j *USFake) Scan() language.Tag {
-	return language.AmericanEnglish
+func (j *DetectorStub) Scan() language.Tag {
+	return language.BritishEnglish
 }
 
 var _ = Describe("Bootstrap", Ordered, func() {
@@ -36,7 +36,7 @@ var _ = Describe("Bootstrap", Ordered, func() {
 	Context("widget command", func() {
 		It("🧪 should: invoke without error", func() {
 			bootstrap := command.Bootstrap{
-				Detector: &USFake{},
+				Detector: &DetectorStub{},
 			}
 			bootstrap.Execute(func(detector command.LocaleDetector) []string {
 

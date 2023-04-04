@@ -38,7 +38,7 @@ var _ = Describe("RootCmd", Ordered, func() {
 
 	It("🧪 should: execute", func() {
 		Expect(command.Execute(func(o *command.ExecutionOptions) {
-			o.Detector = &USFake{}
+			o.Detector = &DetectorStub{}
 			o.From = from
 		})).Error().To(BeNil())
 	})
