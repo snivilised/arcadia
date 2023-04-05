@@ -37,7 +37,7 @@ type FooBarError struct {
 }
 
 // FooBar enables the client to check if error is FooBarError
-// via QueryFooBarError
+// via FooBarErrorBehaviourQuery
 func (e FooBarError) FooBar() bool {
 	return true
 }

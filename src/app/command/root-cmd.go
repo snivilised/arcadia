@@ -40,5 +40,4 @@ func Execute(setter ...ExecutionOptionsFn) error {
 type RootParameterSet struct {
 	ConfigFile string
 	Language   string
-	Toggle     bool
 }
