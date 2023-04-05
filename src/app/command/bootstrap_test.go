@@ -1,13 +1,10 @@
 package command_test
 
 import (
-	"fmt"
-
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/snivilised/arcadia/src/app/command"
 	"github.com/snivilised/arcadia/src/internal/helpers"
-	xi18n "github.com/snivilised/extendio/i18n"
 	"github.com/snivilised/extendio/xfs/utils"
 
 	"golang.org/x/text/language"
@@ -33,33 +30,13 @@ var _ = Describe("Bootstrap", Ordered, func() {
 		Expect(utils.FolderExists(l10nPath)).To(BeTrue())
 	})
 
-	Context("widget command", func() {
-		It("🧪 should: invoke without error", func() {
+	Context("given: root defined with widget sub-command", func() {
+		It("🧪 should: setup command without error", func() {
 			bootstrap := command.Bootstrap{
 				Detector: &DetectorStub{},
 			}
-			bootstrap.Execute(func(detector command.LocaleDetector) []string {
-
-				from := xi18n.LoadFrom{
-					Path: l10nPath,
-					Sources: xi18n.TranslationFiles{
-						command.SOURCE_ID: xi18n.TranslationSource{
-							Name: fmt.Sprintf("test.%v", command.ApplicationName)},
-					},
-				}
-
-				err := xi18n.Use(func(uo *xi18n.UseOptions) {
-					uo.Tag = detector.Scan()
-					uo.From = from
-				})
-				if err != nil {
-					Fail(err.Error())
-				}
-
-				args := []string{"widget", "-p", "P?<date>", "-t", "30"}
-				return args
-			})
-			Expect(true)
+			rootCmd := bootstrap.Root()
+			Expect(rootCmd).NotTo(BeNil())
 		})
 	})
 })

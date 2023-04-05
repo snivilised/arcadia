@@ -7,9 +7,10 @@ import (
 
 	"github.com/snivilised/cobrass/src/assistant"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 )
 
-// TODO: remove this dummy command and replace with application/library
+// CLIENT-TODO: remove this dummy command and replace with application/library
 // relevant alternative(s)
 
 type OutputFormatEnum int
@@ -47,14 +48,6 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var appErr error
 
-			// check for alternative config file setting
-			//
-			if rps := container.MustGetParamSet(RootPsName).(*assistant.ParamSet[RootParameterSet]); rps.Native.ConfigFile != "" { //nolint:errcheck // is Must call
-				configure(func(co *configureOptions) {
-					*co.configFile = rps.Native.ConfigFile
-				})
-			}
-
 			ps := container.MustGetParamSet(WidgetPsName).(*assistant.ParamSet[WidgetParameterSet]) //nolint:errcheck // is Must call
 
 			if err := ps.Validate(); err == nil {
@@ -73,7 +66,13 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 					}
 					return fmt.Errorf("format: '%v' is invalid", ps.Format)
 				}); xv == nil {
-					fmt.Printf("%v %v Running widget\n", AppEmoji, ApplicationName)
+					options := []string{}
+					cmd.Flags().Visit(func(f *pflag.Flag) {
+						options = append(options, fmt.Sprintf("--%v=%v", f.Name, f.Value))
+					})
+					fmt.Printf("%v %v Running widget, with options: '%v', args: '%v'\n",
+						AppEmoji, ApplicationName, options, args,
+					)
 					// ---> execute application core with the parameter set (native)
 					//
 					// appErr = runApplication(native)
@@ -158,15 +157,15 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 	_ = widgetCommand.MarkFlagRequired("pattern")
 
 	const (
-		Lo  = uint(25)
-		Hi  = uint(50)
-		Def = uint(10)
+		Low  = uint(25)
+		High = uint(50)
+		Def  = uint(10)
 	)
 
 	paramSet.BindValidatedUintWithin(
 		assistant.NewFlagInfo("threshold", "t", Def),
 		&paramSet.Native.Threshold,
-		Lo, Hi,
+		Low, High,
 	)
 
 	// If you want to disable the widget command but keep it in the project for reference

@@ -1,7 +1,7 @@
-version: '3'
+version: "3"
 silent: true
 
-dotenv: ['.env']
+dotenv: [".env"]
 
 vars:
   BINARY_NAME: arcadia
@@ -31,17 +31,17 @@ tasks:
   build-w:
     cmds:
       - task: build_generic
-        vars: {TARGET_OS: windows, TARGET_ARCH: amd64, BINARY_EXT: .exe}
+        vars: { TARGET_OS: windows, TARGET_ARCH: amd64, BINARY_EXT: .exe }
 
   build-l:
     cmds:
       - task: build_generic
-        vars: {TARGET_OS: linux, TARGET_ARCH: amd64}
+        vars: { TARGET_OS: linux, TARGET_ARCH: amd64 }
 
   build-m:
     cmds:
       - task: build_generic
-        vars: {TARGET_OS: darwin, TARGET_ARCH: amd64}
+        vars: { TARGET_OS: darwin, TARGET_ARCH: amd64 }
 
   d:
     cmds:
@@ -54,6 +54,12 @@ tasks:
   t:
     cmds:
       - go test ./...
+
+  tbd:
+    cmds:
+      - task: t
+      - task: b
+      - task: d
 
   watchv:
     cmds:
@@ -92,7 +98,7 @@ tasks:
   lint:
     cmds:
       - golangci-lint run
- 
+
   # currently, this is hardcoded for windows
   #
   deploy:

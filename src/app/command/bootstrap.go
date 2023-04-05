@@ -1,15 +1,17 @@
 package command
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 
 	"github.com/cubiest/jibberjabber"
+	"github.com/samber/lo"
 	"github.com/snivilised/cobrass/src/assistant"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"golang.org/x/text/language"
+
+	xi18n "github.com/snivilised/extendio/i18n"
 )
 
 type LocaleDetector interface {
@@ -26,23 +28,18 @@ func (j *Jabber) Scan() language.Tag {
 	return language.MustParse(lang)
 }
 
-// Bootstrap represents construct that performs start up of the cli without resorting to
-// the use of Go's init() mechanism and minimal use of package global variables.
+// Bootstrap represents construct that performs start up of the cli
+// without resorting to the use of Go's init() mechanism and minimal
+// use of package global variables.
 type Bootstrap struct {
 	Detector  LocaleDetector
 	container *assistant.CobraContainer
 }
 
-// Execute runs the bootstrap. This is typically invoked from the root command, which
-// typically initialises the translate package.
-func (b *Bootstrap) Execute(initialise func(LocaleDetector) []string) {
-	if b.Detector == nil {
-		b.Detector = &Jabber{}
-	}
-
-	args := initialise(b.Detector)
-
-	configure()
+// Root builds the command tree and returns the root command, ready
+// to be executed.
+func (b *Bootstrap) Root() *cobra.Command {
+	b.configure()
 
 	// all these string literals here should be made translate-able
 	//
@@ -63,27 +60,10 @@ func (b *Bootstrap) Execute(initialise func(LocaleDetector) []string) {
 		},
 	)
 
-	setupRootCommand(b.container)
+	b.buildRootCommand(b.container)
 	buildWidgetCommand(b.container)
 
-	root := b.container.Root()
-
-	var err error
-
-	if args != nil {
-		buf := new(bytes.Buffer)
-		root.SetOut(buf)
-		root.SetErr(buf)
-		root.SetArgs(args)
-
-		_, err = root.ExecuteC()
-	} else {
-		err = root.Execute()
-	}
-
-	if err != nil {
-		os.Exit(1)
-	}
+	return b.container.Root()
 }
 
 type configureOptions struct {
@@ -92,7 +72,7 @@ type configureOptions struct {
 
 type ConfigureOptionFn func(*configureOptions)
 
-func configure(options ...ConfigureOptionFn) {
+func (b *Bootstrap) configure(options ...ConfigureOptionFn) {
 	var configFile string
 
 	o := configureOptions{
@@ -115,7 +95,8 @@ func configure(options ...ConfigureOptionFn) {
 		//
 		viper.AddConfigPath(home)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(fmt.Sprintf(".%v", ApplicationName))
+		configName := fmt.Sprintf("%v.yml", ApplicationName)
+		viper.SetConfigName(configName)
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
@@ -129,15 +110,74 @@ func configure(options ...ConfigureOptionFn) {
 }
 
 func handleLangSetting() {
-	// if viper.InConfig("lang") {
-	// 	lang := viper.GetString("lang")
-	// 	tag, err := language.Parse(lang)
+	tag := lo.TernaryF(viper.InConfig("lang"),
+		func() language.Tag {
+			lang := viper.GetString("lang")
+			parsedTag, err := language.Parse(lang)
 
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		os.Exit(1)
-	// 	}
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
 
-	// 	_ = translate.UseTag(tag)
-	// }
+			return parsedTag
+		},
+		func() language.Tag {
+			return xi18n.DefaultLanguage.Get()
+		},
+	)
+
+	err := xi18n.Use(func(uo *xi18n.UseOptions) {
+		uo.Tag = tag
+		uo.From = xi18n.LoadFrom{
+			Sources: xi18n.TranslationFiles{
+				SOURCE_ID: xi18n.TranslationSource{Name: "arcadia"},
+			},
+		}
+	})
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
+
+func (b *Bootstrap) buildRootCommand(container *assistant.CobraContainer) {
+	// Here you will define your flags and configuration settings.
+	// Cobra supports persistent flags, which, if defined here,
+	// will be global for your application.
+	//
+	root := container.Root()
+	paramSet := assistant.NewParamSet[RootParameterSet](root)
+
+	paramSet.BindString(&assistant.FlagInfo{
+		Name:               "config",
+		Usage:              fmt.Sprintf("config file (default is $HOME/%v.yml", ApplicationName),
+		Default:            "",
+		AlternativeFlagSet: root.PersistentFlags(),
+	}, &paramSet.Native.ConfigFile)
+
+	paramSet.BindValidatedString(&assistant.FlagInfo{
+		Name:               "lang",
+		Usage:              "lang defines the language",
+		Default:            "en-GB",
+		AlternativeFlagSet: root.PersistentFlags(),
+	}, &paramSet.Native.Language, func(value string) error {
+		_, err := language.Parse(value)
+		return err
+	})
+
+	// Cobra also supports local flags, which will only run
+	// when this action is called directly.
+	const (
+		ToggleShort = "t"
+		ToggleUsage = "toggle Help message for toggle"
+	)
+
+	paramSet.BindBool(
+		assistant.NewFlagInfo(ToggleUsage, ToggleShort, false),
+		&paramSet.Native.Toggle,
+	)
+
+	container.MustRegisterParamSet(RootPsName, paramSet)
 }

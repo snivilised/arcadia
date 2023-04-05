@@ -190,6 +190,8 @@ github.com/snivilised/cobrass v0.2.0 h1:3u6jK0KK+glrCGBIZQIbpyeGvATmaUrDhv9asEYK
 github.com/snivilised/cobrass v0.2.0/go.mod h1:/IVkewm12jIhi9anbFKS+zSJH3HfZo7CWztwcXf8h/g=
 github.com/snivilised/extendio v0.1.10 h1:04SwVHC+yWz7XMyMEqGEinphylBBafWpNvTZwoXam7Q=
 github.com/snivilised/extendio v0.1.10/go.mod h1:l8OlVZCZpCNdm7WLFaZ287D6KwwqCmibP1wNAWiACXg=
+github.com/snivilised/extendio v0.1.12 h1:p8jxiozvSIMHp/YomQ7Q/rtvvQ/8CbN7WcTTkf8vjCE=
+github.com/snivilised/extendio v0.1.12/go.mod h1:l8OlVZCZpCNdm7WLFaZ287D6KwwqCmibP1wNAWiACXg=
 github.com/spf13/afero v1.9.3 h1:41FoI0fD7OR7mGcKE/aOiLkGreyf8ifIOQmJANWogMk=
 github.com/spf13/afero v1.9.3/go.mod h1:iUV7ddyEEZPO5gA3zD4fJt6iStLlL+Lg4m2cihcDf8Y=
 github.com/spf13/cast v1.5.0 h1:rj3WzYc11XZaIZMPKmwP96zkFEnnAmV8s6XbB2aY32w=
