@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 	"golang.org/x/text/language"
 
+	"github.com/snivilised/arcadia/src/i18n"
 	xi18n "github.com/snivilised/extendio/i18n"
 )
 
@@ -43,16 +44,12 @@ func (b *Bootstrap) Root() *cobra.Command {
 
 	// all these string literals here should be made translate-able
 	//
+
 	b.container = assistant.NewCobraContainer(
 		&cobra.Command{
-			Use:   "main",
-			Short: "A brief description of your application",
-			Long: `A longer description that spans multiple lines and likely contains
-		examples and usage of using your application. For example:
-		
-		Cobra is a CLI library for Go that empowers applications.
-		This application is a tool to generate the needed files
-		to quickly create a Cobra application.`,
+			Use:     "main",
+			Short:   xi18n.Text(i18n.RootCmdShortDescTemplData{}),
+			Long:    xi18n.Text(i18n.RootCmdLongDescTemplData{}),
 			Version: fmt.Sprintf("'%v'", Version),
 			// Uncomment the following line if your bare application
 			// has an action associated with it:
@@ -102,11 +99,16 @@ func (b *Bootstrap) configure(options ...ConfigureOptionFn) {
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-	}
+	err := viper.ReadInConfig()
 
 	handleLangSetting()
+
+	if err != nil {
+		msg := xi18n.Text(i18n.UsingConfigFileTemplData{
+			ConfigFileName: viper.ConfigFileUsed(),
+		})
+		fmt.Fprintln(os.Stderr, msg)
+	}
 }
 
 func handleLangSetting() {
@@ -131,7 +133,7 @@ func handleLangSetting() {
 		uo.Tag = tag
 		uo.From = xi18n.LoadFrom{
 			Sources: xi18n.TranslationFiles{
-				SOURCE_ID: xi18n.TranslationSource{Name: "arcadia"},
+				SOURCE_ID: xi18n.TranslationSource{Name: ApplicationName},
 			},
 		}
 	})
@@ -151,33 +153,23 @@ func (b *Bootstrap) buildRootCommand(container *assistant.CobraContainer) {
 	paramSet := assistant.NewParamSet[RootParameterSet](root)
 
 	paramSet.BindString(&assistant.FlagInfo{
-		Name:               "config",
-		Usage:              fmt.Sprintf("config file (default is $HOME/%v.yml", ApplicationName),
+		Name: "config",
+		Usage: xi18n.Text(i18n.RootCmdConfigFileUsageTemplData{
+			ConfigFileName: ApplicationName,
+		}),
 		Default:            "",
 		AlternativeFlagSet: root.PersistentFlags(),
 	}, &paramSet.Native.ConfigFile)
 
 	paramSet.BindValidatedString(&assistant.FlagInfo{
 		Name:               "lang",
-		Usage:              "lang defines the language",
-		Default:            "en-GB",
+		Usage:              xi18n.Text(i18n.RootCmdLangUsageTemplData{}),
+		Default:            xi18n.DefaultLanguage.Get().String(),
 		AlternativeFlagSet: root.PersistentFlags(),
 	}, &paramSet.Native.Language, func(value string) error {
 		_, err := language.Parse(value)
 		return err
 	})
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	const (
-		ToggleShort = "t"
-		ToggleUsage = "toggle Help message for toggle"
-	)
-
-	paramSet.BindBool(
-		assistant.NewFlagInfo(ToggleUsage, ToggleShort, false),
-		&paramSet.Native.Toggle,
-	)
 
 	container.MustRegisterParamSet(RootPsName, paramSet)
 }
