@@ -1,6 +1,8 @@
 before:
   hooks:
     - go mod tidy
+    # ? do we need a - go mod generate
+    # - go mod generate
 builds:
   - env:
       - CGO_ENABLED=0
@@ -9,6 +11,13 @@ builds:
       - windows
       - darwin
   - main: ./src/app/main/
+    # Not currently what else is also defaulting to default,
+    # causing the conflict error because of multiple builds
+    # with the same id. Something else somewhere needs id
+    # setting to something, but what?
+    #
+    id: "arcadia-main-release"
+    binary: arcadia
 
 archives:
   - format: tar.gz
