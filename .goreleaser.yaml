@@ -11,6 +11,7 @@ builds:
       - linux
       - windows
       - darwin
+    main: ./src/app/
   - id: "arcadia-main"
     main: ./src/app/main/
     binary: arcadia
