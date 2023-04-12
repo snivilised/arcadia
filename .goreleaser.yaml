@@ -3,6 +3,7 @@ before:
     - go mod tidy
     # ? do we need a - go mod generate
     # - go mod generate
+
 builds:
   - id: "arcadia"
     env:
@@ -12,15 +13,7 @@ builds:
       - windows
       - darwin
     main: ./src/app/
-  - id: "arcadia-main"
-    main: ./src/app/main/
-    binary: arcadia
-    env:
-      - CGO_ENABLED=0
-    goos:
-      - linux
-      - windows
-      - darwin
+
 archives:
   - format: tar.gz
     # this name template makes the OS and Arch compatible with the results of uname.
