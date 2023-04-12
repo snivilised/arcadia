@@ -4,21 +4,22 @@ before:
     # ? do we need a - go mod generate
     # - go mod generate
 builds:
-  - env:
+  - id: "arcadia"
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
       - windows
       - darwin
-  - main: ./src/app/main/
-    # Not currently what else is also defaulting to default,
-    # causing the conflict error because of multiple builds
-    # with the same id. Something else somewhere needs id
-    # setting to something, but what?
-    #
-    id: "arcadia-main-release"
+  - id: "arcadia-main"
+    main: ./src/app/main/
     binary: arcadia
-
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
 archives:
   - format: tar.gz
     # this name template makes the OS and Arch compatible with the results of uname.
