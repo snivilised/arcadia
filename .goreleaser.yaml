@@ -12,7 +12,7 @@ builds:
       - linux
       - windows
       - darwin
-    main: ./src/app/
+    main: ./src/app/main
 
 archives:
   - format: tar.gz
