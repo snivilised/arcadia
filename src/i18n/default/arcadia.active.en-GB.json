@@ -1,8 +1,4 @@
 {
-  "foo-bar.arcadia.nav": {
-    "description": "Foo Bar description",
-    "other": "foo bar failure '{{.Path}}' (reason: {{.Reason}})"
-  },
   "root-command-config-file-usage": {
     "description": "root command config flag usage",
     "other": "config file (default is $HOME/{{.ConfigFileName}}.yml)"
