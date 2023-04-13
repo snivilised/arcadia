@@ -1,6 +1,0 @@
-{
-  "foo-bar.arcadia.nav": {
-    "description": "Foo Bar description",
-    "other": "foo bar failure '{{.Path}}' (reason: {{.Reason}})"
-  }
-}
