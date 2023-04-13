@@ -8,7 +8,7 @@ vars:
   BINARY_NAME: arcadia
   DEPLOY_DIR: ./src/i18n/deploy
   OUT_DIR: ./src/i18n/out
-  DIST_DIR: dist
+  DIST_DIR: ./dist
   #
   SOURCE_LANG: en-GB
   SOURCE_ACTIVE: "active.{{.SOURCE_LANG}}.{{.FORMAT}}"
@@ -33,7 +33,7 @@ tasks:
 
   clean:
     cmds:
-      - cmd: rm -rf ./{{.DIST_DIR}}/*
+      - cmd: rm -rf {{.DIST_DIR}}/*
 
   build_generic:
     vars:
@@ -42,13 +42,13 @@ tasks:
 
     cmds:
       - echo "cross compiling from {{OS}} to {{.TARGET_OS}}"
-      - GOOS={{.TARGET_OS}} GOARCH={{.TARGET_ARCH}} go build -o ./{{.DIST_DIR}}/{{.TARGET_OS}}/{{.BINARY_NAME}}{{.BINARY_EXT}} -v {{.APPLICATION_ENTRY}}
+      - GOOS={{.TARGET_OS}} GOARCH={{.TARGET_ARCH}} go build -o {{.DIST_DIR}}/{{.TARGET_OS}}/{{.BINARY_NAME}}{{.BINARY_EXT}} -v {{.APPLICATION_ENTRY}}
 
     sources:
       - ./src/**/*.go
 
     generates:
-      - ./{{.DIST_DIR}}/{{.TARGET_OS}}/{{.BINARY_NAME}}{{.BINARY_EXT}}
+      - "{{.DIST_DIR}}/{{.TARGET_OS}}/{{.BINARY_NAME}}{{.BINARY_EXT}}"
 
   b:
     cmds:
@@ -87,13 +87,13 @@ tasks:
     vars:
       BINARY_EXT: .exe
       TARGET_OS: windows
-      DEPLOY_BINARY: ./{{.DIST_DIR}}/{{.TARGET_OS}}/{{.BINARY_NAME}}{{.BINARY_EXT}}
-      DEPLOY_US: ./{{.DEPLOY_DIR}}/{{.ACTIVE_US}}
+      DEPLOY_BINARY: "{{.DIST_DIR}}/{{.TARGET_OS}}/{{.BINARY_NAME}}{{.BINARY_EXT}}"
+      DEPLOY_US: "{{.DEPLOY_DIR}}/{{.ACTIVE_US}}"
 
     cmds:
       - echo "deploying to location (.env) DEPLOY_TO  ==> '$DEPLOY_TO'"
       - /bin/cp -f {{.DEPLOY_BINARY}} $DEPLOY_TO
-      - /bin/cp -f ./{{.DEPLOY_DIR}}/{{.ACTIVE_US}} $DEPLOY_TO
+      - /bin/cp -f {{.DEPLOY_DIR}}/{{.ACTIVE_US}} $DEPLOY_TO
 
     generates:
       - $DEPLOY_TO/{{.DEPLOY_BINARY}}
@@ -102,7 +102,7 @@ tasks:
     preconditions:
       - test $DEPLOY_TO
       - test -f {{.DEPLOY_BINARY}}
-      - test -f ./{{.DEPLOY_DIR}}/{{.ACTIVE_US}}
+      - test -f {{.DEPLOY_DIR}}/{{.ACTIVE_US}}
 
   tbd:
     cmds:
@@ -271,4 +271,4 @@ tasks:
         -format {{.FORMAT}}
         -sourceLanguage "en-US"
         -outdir ./i18n/temp
-        ./{{.OUT_DIR}}/{{.TRANSLATE_US}} ./{{.DEPLOY_DIR}}/{{.ACTIVE_US}}
+        ./{{.OUT_DIR}}/{{.TRANSLATE_US}} {{.DEPLOY_DIR}}/{{.ACTIVE_US}}
