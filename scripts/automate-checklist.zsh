@@ -21,6 +21,11 @@ function auto-check() {
     return 1
   fi
 
+  update-arcadia-in-taskfile $repo $owner
+  if [ $? -ne 0 ]; then
+    return 1
+  fi
+
   update-workflow-names $repo $owner
   if [ $? -ne 0 ]; then
     return 1
@@ -52,6 +57,7 @@ function auto-check() {
   fi
 
   touch ./.env
+  echo "✔️ done"
   return 0
 }
 
@@ -108,6 +114,15 @@ function update-arcadia-in-root-cmd() {
   local replacement=$repo
   update-all-generic $repo $owner $from $file_pattern "$target" "$replacement"
 }
+
+function update-arcadia-in-taskfile() {
+  local repo=$1
+  local owner=$2
+  local from=./
+  local file_pattern=Taskfile.yml
+  local target=arcadia
+  local replacement=$repo
+  update-all-generic $repo $owner $from $file_pattern "$target" "$replacement"}
 
 function update-workflow-names() {
   local repo=$1
