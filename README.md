@@ -13,6 +13,9 @@
 <!-- MD013/Line Length -->
 <!-- MarkDownLint-disable MD013 -->
 
+<!-- MD014/commands-show-output: Dollar signs used before commands without showing output mark down lint -->
+<!-- MarkDownLint-disable MD014 -->
+
 <!-- MD033/no-inline-html: Inline HTML -->
 <!-- MarkDownLint-disable MD033 -->
 
@@ -50,31 +53,32 @@ By using this template, there is no need to use the cobra-cli to scaffold your a
 
 ### 📝 Checklist of required changes
 
-The following is list of actions that must be performed before using this template. Most of the changes concern changing the name `Arcadia` to the name of the new application. There are quite a lot of changes required after creating the client project so ideally, there would be a tool the user could run that would automatically apply these changes. Perhaps, this will be developed in the future (either as a golang cli tool or even perhaps implemented as a zsh script using ___sed/gawk___), but for now the user should following the modification steps documented here, which incidently are pretty easy to apply and get right.
+The following is list of actions that must be performed before using this template. Most of the changes concern changing the name `Arcadia` to the name of the new application. As the template is instantiated from github, the new name will automatically replace the top level directory name, that being ___arcadia___.
 
-As the template is instantiated from github, the new name will automatically replace the top level directory name, that being ___arcadia___.
+➕ The following descriptions use owner name ___pandora___ and repo name ___maestro___ as an example. That is to say the client has instantiated ___arcadia___ template into github at url _github.com/pandora/maestro_
 
-Assuming the instantiating client project name is ___maestro___ and the owning user/org name is ___pandora___...
+#### 🤖 Automated changes
 
-#### ✅ Rename import statements
+Automated via `automated-checklist.zsh` script. Just source the script and execute from the root directory:
+
+```
+$ . ./scripts/automate-checklist.zsh
+$ auto-check
+```
+
+or the user can include the script's content inside their profile script (eg ~/.zshrc), so that the functionality is always available.
+
+⚠️ The ___auto-check___ script function has only been tested in ___zsh___ shell, but not in ___bash___ or other linux shells. So it may not work. If this is the case, then the updates will need to made manually as documented.
+
+##### ✅ Rename import statements
 
 + `rename import paths`: global search and replace ___snivilised/arcadia___ to ___pandora/maestro___
 
-#### ✅ Structural changes
-
-+ `github actions workflow`: If the client application needs to use github actions for continuous integration, then the name of the [workflow](.github/workflows/ci-workflow.yml) needs to be changed. If not, then the workflow file should be deleted
-
-+ `remove the dummy code`: __widget-cmd.go__, __greeting.go__ and its associated test __greeting_test.go__ (but only do this once new valid tests are ready to replace it, to avoid references being removed after _go mod tidy_)
-
-+ `replace bootstrap testcase`: There is a test case which by default is set to invoke the __widget__ command. When the user is ready to remove this command, then the corresponding test case should be modified to invoke another command with appropriate parameters. This test case is there to ensure that the ___bootstrapping___ process works, as opposed to checking the validity of the command itself.
-
-+ `review bootstrap.go`: this will need to be modified to invoke creation of any custom commands. The `execute` method of __bootstrap__ should be modified to invoke command builder. Refer to the `widget` command to see how this is done.
-
-#### ✅ Identifiers
+##### ✅ Identifiers
 
 + `change arcadiaTemplData`: perform a refactor rename (_Rename Symbol_) to ___maestroTemplData___
 
-#### ✅ Global search replace arcadia to maestro
+##### ✅ Global search replace arcadia to maestro
 
 Will take case of the following required changes:
 
@@ -83,67 +87,78 @@ Will take case of the following required changes:
 + `update BINARY_NAME`: Inside _Taskfile.yml_, change the value of ___BINARY_NAME___ to the name of the client application.
 + `update github action workflows`: change the name of the workflows in the .yaml files to replace ___Arcadia___ to ___Maestro___ (note the change of case, if this is important).
 
-#### ✅ Localisation/Internationalisation
+##### ✅ Localisation/Internationalisation
 
-+ `update translation file`: Inside _Taskfile.yml_, add support for loading any translations that the app will support. By default, it deploys a translation file for __en-US__ so this needs to be updated as appropriate.
-+ `update message id`: This package supports i18n and as part of that defines messages that need to be translated. The user needs to update the message ids of defined messages in `messages.go`, which by default contain ___arcadia___ as part of the id.
-+ change the names of the translation files, eg change ___arcadia.active.en-GB.json___ to ___maestro.active.en-GB.json___
++ `change the names of the translation files`: eg change ___arcadia.active.en-GB.json___ to ___maestro.active.en-GB.json___
 
-#### ✅ Github changes
+##### ✅ Miscellaneous automated changes
+
++ `reset version files`: this is optional because the release process automatically updates the version number according to the tag specified by the user, but will initially contain the version number which reflects the current value of arcadia at the time the client project is instantiated.
++ `change SOURCE_ID`: to "github.com/pandora/maestro"
+
+#### 🖐 Manual changes
+
+The following documents manual changes required.
+
+##### ☑️ Structural changes
+
++ `github actions workflow`: If the client does not to use github actions workflow automation, then these files ([ci-workflow](.github/workflows/ci-workflow.yml), [release-workflow](.github/workflows/release-workflow.yml), [.goreleaser.yaml](./.goreleaser.yaml)), should be deleted.
+
++ `remove the dummy code`: __widget-cmd.go__ and its associated test __widget_test.go__ (but only do this once new valid tests are ready to replace it, to avoid references being removed after _go mod tidy_)
+
++ `review bootstrap.go`: this will need to be modified to invoke creation of any custom commands. The `execute` method of __bootstrap__ should be modified to invoke command builder. Refer to the `widget` command to see how this is done.
+
+#### ☑️ Github changes
 
 Unfortunately, github doesn't copy over the template project's settings to the client project, so these changes must be made manually:
 
 + `setup branch protection rules`: require pull request
 + `update project settings`: disable __Allow merge commits__ and __Allow squash merging__
 
-#### ✅ Code coverage
+#### ☑️ Code coverage
 
 + `coveralls.io`: add maestro project
 
-#### ✅ Miscellaneous changes
+#### ☑️ Miscellaneous changes
 
-+ `change SOURCE_ID`: to "github.com/snivilised/maestro"
 + `replace README content`
 + `update email address in copyright statement`: The __root.go__ file contains a placeholder for an email address, update this comment accordingly.
 + `create .env file`: Add any appropriate secrets to a newly created .env in the root directory and to enable the __deploy__ task to work, define a __DEPLOY_TO__ entry that defines where builds should be deployed to for testing
-+ `reset version files`: this is optional because the release process automatically updates the version number according to the tag specified by the user, but will initially contain the version number which reflects the current value of arcadia at the time the client project is instantiated.
 + `install pre-commit hooks`: just run ___pre-commit install___
++ `update translation file`: Inside _Taskfile.yml_, add support for loading any translations that the app will support. By default, it deploys a translation file for __en-US__ so this needs to be updated as appropriate.
 
 ### 🌐 l10n Translations
 
-This template has been setup to support localisation. The default language is `en-GB` with support for `en-US`. There is a translation file for `en-US` defined as __src/internal/l10n/out/arcadia.active.en-US.json__.
+This template has been setup to support localisation. The default language is `en-GB` with support for `en-US`. There is a translation file for `en-US` defined as __src/i18n/deploy/arcadia.active.en-US.json__. This is the initial translation for `en-US` that should be deployed with the app.
 
 Make sure that the go-i18n package has been installed so that it can be invoked as cli, see [go-i18n](https://github.com/nicksnyder/go-i18n) for installation instructions.
 
 To maintain localisation of the application, the user must take care to implement all steps to ensure translate-ability of all user facing messages. Whenever there is a need to add/change user facing messages including error messages, to maintain this state, the user must:
 
-+ define template struct (__xxxTemplData__) in __src/internal/l10n/messages.go__ and corresponding __Message()__ method. All messages are defined here in the same location, simplifying the message extraction process as all extractable strings occur at the same place. Please see [go-i18n](https://github.com/nicksnyder/go-i18n) for all translation/pluralisation options and other regional sensitive content.
-+ define a corresponding helper function in __src/internal/translate/messages.go__. These helper functions are the ones that the rest of the application will use in order to generate region sensitive user facing string content.
-+ cd to the ___l10n___ at __src/internal/l10n/__
-+ run `goi18n extract -format json`, this will create an updated __active.en.json__ file
-+ run `goi18n merge -outdir out -format json active.en.json translate.en-US.json`
-+ rename __out/active.en-US.json__ to __out/arcadia.active.en-US.json__. The name __arcadia__ should be changed to the name of the new app (which should correspond with `ApplicationName` defined in __src/app/command/root-cmd.go__).
++ define template struct (__xxxTemplData__) in __src/i18n/messages.go__ and corresponding __Message()__ method. All messages are defined here in the same location, simplifying the message extraction process as all extractable strings occur at the same place. Please see [go-i18n](https://github.com/nicksnyder/go-i18n) for all translation/pluralisation options and other regional sensitive content.
 
-The file __out/arcadia.active.en-US.json__ is the translation file that will be deployed with the executable. Of course, if you want to use a config file format other than `json`, then there will be a little more work to do, but is fairly straight forward.
+For more detailed workflow instructions relating to i18n, please see [i18n README](./resources/doc/i18n-README.md)
 
 ### 🧪 Quick Test
 
 To check the app is working (as opposed to running the unit tests), build and deploy:
 
-> task b
+> task tbd
 
-> task d
+(which performs a test, build then deploy)
 
 NB: the `deploy` task has been set up for windows by default, but can be changed at will.
 
 Check that the executable and the US language file __arcadia.active.en-US.json__ have both been deployed. Then invoke the widget command with something like
 
-> arcadia widget -p "P?\<date\>" -t 30
+> maestro widget -p "P?\<date\>" -t 30
 
 Optionally, the user can also specify the ___directory___ flag:
 
-> arcadia widget -p "P?\<date\>" -t 30 -d foo-bar.txt
+> maestro widget -p "P?\<date\>" -t 30 -d foo-bar.txt
 
 ... where ___foo-bar.txt___ should be replaced with a file that actually exists.
+
+This assumes that the the project name is `maestro`, change as appropriate.
 
 Since the `widget` command uses `Cobrass` option validation to check that the file specified exists, the app will fail if the file does not exist. This serves as an example of how to implement option validation with `Cobrass`.
