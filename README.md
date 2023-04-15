@@ -149,7 +149,7 @@ To check the app is working (as opposed to running the unit tests), build and de
 
 NB: the `deploy` task has been set up for windows by default, but can be changed at will.
 
-Check that the executable and the US language file __arcadia.active.en-US.json__ have both been deployed. Then invoke the widget command with something like
+Check that the executable and the US language file __maestro.active.en-US.json__ have both been deployed. Then invoke the widget command with something like
 
 > maestro widget -p "P?\<date\>" -t 30
 

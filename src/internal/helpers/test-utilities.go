@@ -27,8 +27,10 @@ func JoinCwd(segments ...string) string {
 		grand := filepath.Dir(parent)
 		great := filepath.Dir(grand)
 		all := append([]string{great}, segments...)
+
 		return filepath.Join(all...)
 	}
+
 	panic("could not get root path")
 }
 
@@ -36,11 +38,12 @@ func Root() string {
 	if current, err := os.Getwd(); err == nil {
 		return current
 	}
+
 	panic("could not get root path")
 }
 
 func Repo(relative string) string {
-	_, filename, _, _ := runtime.Caller(0)
+	_, filename, _, _ := runtime.Caller(0) //nolint:dogsled // use of 3 _ is out of our control
 	return Path(filepath.Dir(filename), relative)
 }
 
@@ -49,7 +52,9 @@ func Log() string {
 		parent, _ := filepath.Split(current)
 		grand := filepath.Dir(parent)
 		great := filepath.Dir(grand)
+
 		return filepath.Join(great, "Test", "test.log")
 	}
+
 	panic("could not get root path")
 }

@@ -23,7 +23,7 @@ const (
 	ScribbleFormatEn
 )
 
-type WidgetParameterSet struct {
+type WidgetParameterSet struct { // 80 could be 24
 	Directory string
 	Format    OutputFormatEnum
 	Concise   bool

@@ -122,7 +122,8 @@ function update-arcadia-in-taskfile() {
   local file_pattern=Taskfile.yml
   local target=arcadia
   local replacement=$repo
-  update-all-generic $repo $owner $from $file_pattern "$target" "$replacement"}
+  update-all-generic $repo $owner $from $file_pattern "$target" "$replacement"
+}
 
 function update-workflow-names() {
   local repo=$1
@@ -180,9 +181,6 @@ function update-import-statements() {
   update-all-generic $repo $owner $from $file_pattern "$target" "$replacement"
 }
 
-# * rename-files
-# find . -name 'arcadia*.json' -type f -print
-#
 function rename-language-files() {
   local repo=$1
   find . -name 'arcadia*.json' -type f -print0 |

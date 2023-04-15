@@ -24,5 +24,6 @@ func (ch *CommandTester) executeC() (*cobra.Command, string, error) {
 	ch.Root.SetArgs(ch.Args)
 
 	c, err := ch.Root.ExecuteC()
+
 	return c, buf.String(), err
 }

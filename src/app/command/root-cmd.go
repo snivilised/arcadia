@@ -11,7 +11,7 @@ const (
 	AppEmoji        = "🦄"
 	ApplicationName = "arcadia"
 	RootPsName      = "root-ps"
-	SOURCE_ID       = "github.com/snivilised/arcadia"
+	SourceID        = "github.com/snivilised/arcadia"
 )
 
 type ExecutionOptions struct {
