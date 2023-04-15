@@ -133,7 +133,7 @@ func handleLangSetting() {
 		uo.Tag = tag
 		uo.From = xi18n.LoadFrom{
 			Sources: xi18n.TranslationFiles{
-				SOURCE_ID: xi18n.TranslationSource{Name: ApplicationName},
+				SourceID: xi18n.TranslationSource{Name: ApplicationName},
 			},
 		}
 	})
