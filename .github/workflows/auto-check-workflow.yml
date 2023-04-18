@@ -1,6 +1,6 @@
 name: Initialise Repo
 on:
-  push:
+  create:
     branches:
       # NB: its difficult to get the default branch dynamically in
       # push event, so it has been hardcoded.
@@ -43,7 +43,7 @@ jobs:
 
       - name: Self destruct
         run: |
-          rm -fv .github/workflows/on-init-repo-workflow.yml 2>/dev/null
+          rm -fv .github/workflows/auto-check-workflow.yml 2>/dev/null
 
       - name: Add files and commit changes
         run: |
