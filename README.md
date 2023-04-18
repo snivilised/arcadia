@@ -59,16 +59,7 @@ The following is list of actions that must be performed before using this templa
 
 #### 🤖 Automated changes
 
-Automated via `automated-checklist.zsh` script. Just source the script and execute from the root directory:
-
-```
-$ . ./scripts/automate-checklist.zsh
-$ auto-check
-```
-
-or the user can include the script's content inside their profile script (eg ~/.zshrc), so that the functionality is always available.
-
-⚠️ The ___auto-check___ script function has only been tested in ___zsh___ shell, but not in ___bash___ or other linux shells. So it may not work. If this is the case, then the updates will need to made manually as documented.
+Automated via `automate-checklist.sh` script. When the user instantiates the repo, a github actions workflow is executed which applies changes to the clients repo automatically. The following description describes the changes that are applied on the user's behalf and the workflow is automatically deleted. However, there are other changes that should be made. These compose the manual checklist and should be heeded by the user.
 
 ##### ✅ Rename import statements
 
@@ -80,7 +71,7 @@ or the user can include the script's content inside their profile script (eg ~/.
 
 ##### ✅ Global search replace arcadia to maestro
 
-Will take case of the following required changes:
+Will take care of the following required changes:
 
 + `change module name`: update the module name inside the .mod file in the root directory
 + `change ApplicationName`: modify to reflect the new application name. This application name is incorporated into the name of any translation files to be loaded.
@@ -98,7 +89,7 @@ Will take case of the following required changes:
 
 #### 🖐 Manual changes
 
-The following documents manual changes required.
+The following documents manual changes required. Manual checklist:
 
 ##### ☑️ Structural changes
 
@@ -114,6 +105,8 @@ Unfortunately, github doesn't copy over the template project's settings to the c
 
 + `setup branch protection rules`: require pull request
 + `update project settings`: disable __Allow merge commits__ and __Allow squash merging__
+
+Of course, its up to the user what settings they use in their repo, these are just recommended as a matter of good practice.
 
 #### ☑️ Code coverage
 
