@@ -48,7 +48,7 @@ jobs:
       - name: Add files and commit changes
         run: |
           git add .
-          git commit -m "Apply initial template edits"
+          git commit -m "chore(gh-actions): apply auto-check edits"
           git push -u origin ${{ github.event.repository.default_branch }}
         shell: bash
         env:
