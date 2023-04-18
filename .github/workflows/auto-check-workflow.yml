@@ -40,10 +40,13 @@ jobs:
         run: |
           . ./scripts/automate-checklist.sh
           auto-check
+        shell: bash
 
-      - name: Self destruct
+      - name: Clean up redundant scripts
         run: |
           rm -fv .github/workflows/auto-check-workflow.yml 2>/dev/null
+          rm -fv ./scripts/automate-checklist.sh 2>/dev/null
+        shell: bash
 
       - name: Add files and commit changes
         run: |
