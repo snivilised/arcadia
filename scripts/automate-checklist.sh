@@ -128,8 +128,8 @@ function update-arcadia-in-taskfile() {
 function update-workflow-names() {
   local repo=$1
   local owner=$2
-  local from=./.github/workflows
-  local file_pattern=*.y*ml
+  local from=.github/workflows
+  local file_pattern=*.yml
   local target="name: Arcadia"
   local tc_repo="$(echo ${repo:0:1} | tr '[:lower:]' '[:upper:]')${repo:1}"
   local replacement="name: $tc_repo"
@@ -152,7 +152,6 @@ function update-readme() {
   local owner=$2
   local from=./
   local file_pattern=README.md
-
   local target="arcadia: "
   local replacement="${repo}: "
 
@@ -163,6 +162,14 @@ function update-readme() {
 
   target="snivilised\/arcadia"
   replacement="$owner\/$repo"
+  update-all-generic $repo $owner $from $file_pattern "$target" "$replacement"
+  if [ $? -ne 0 ]; then
+    return 1
+  fi
+
+  target="Arcadia Continuous Integration"
+  tc_repo="$(echo ${repo:0:1} | tr '[:lower:]' '[:upper:]')${repo:1}"
+  replacement="$tc_repo Continuous Integration"
   update-all-generic $repo $owner $from $file_pattern "$target" "$replacement"
   if [ $? -ne 0 ]; then
     return 1
