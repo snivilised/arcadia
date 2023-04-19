@@ -7,6 +7,11 @@ function auto-check() {
   echo "---> 🧰 REPO: $repo"
   echo ""
 
+  update-workflow-names $repo $owner
+  if [ $? -ne 0 ]; then
+    return 1
+  fi
+
   update-mod-file $repo $owner
   if [ $? -ne 0 ]; then
     return 1
@@ -23,11 +28,6 @@ function auto-check() {
   fi
 
   update-arcadia-in-taskfile $repo $owner
-  if [ $? -ne 0 ]; then
-    return 1
-  fi
-
-  update-workflow-names $repo $owner
   if [ $? -ne 0 ]; then
     return 1
   fi
