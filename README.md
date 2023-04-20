@@ -95,7 +95,7 @@ The following documents manual changes required. Manual checklist:
 
 + `github actions workflow`: If the client does not to use github actions workflow automation, then these files ([ci-workflow](.github/workflows/ci-workflow.yml), [release-workflow](.github/workflows/release-workflow.yml), [.goreleaser.yaml](./.goreleaser.yaml)), should be deleted.
 
-+ `remove the dummy code`: __widget-cmd.go__ and its associated test __widget_test.go__ (but only do this once new valid tests are ready to replace it, to avoid references being removed after _go mod tidy_)
++ `rename the widget command`: rename __widget-cmd.go__ and its associated test __widget_test.go__ to whatever is the first command to be implemented in the application. The widget command can serve as a template as to how to define a new command, without having to start from scratch. It will be easier for the user to modify an existing command, so just perform a case sensitive search and replace for ___widget/Widget___ and replace with ___Foo/foo___ where foo represents the new command to be created.
 
 + `review bootstrap.go`: this will need to be modified to invoke creation of any custom commands. The `execute` method of __bootstrap__ should be modified to invoke command builder. Refer to the `widget` command to see how this is done.
 
