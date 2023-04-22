@@ -8,63 +8,49 @@ import (
 	"github.com/snivilised/cobrass/src/assistant"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+
+	xi18n "github.com/snivilised/extendio/i18n"
+
+	"github.com/snivilised/arcadia/src/app/domain"
+	"github.com/snivilised/arcadia/src/i18n"
 )
 
-// CLIENT-TODO: remove this dummy command and replace with application/library
-// relevant alternative(s)
+// CLIENT-TODO: rename this widget command to something required
+// by the application. Widget command is meant to just serve as
+// an aid in creating custom commands and intended to either be
+// replaced or renamed.
 
-type OutputFormatEnum int
-
-const (
-	_ OutputFormatEnum = iota
-	XMLFormatEn
-	JSONFormatEn
-	TextFormatEn
-	ScribbleFormatEn
-)
-
-type WidgetParameterSet struct { // 80 could be 24
-	Directory string
-	Format    OutputFormatEnum
-	Concise   bool
-	Pattern   string
-	Threshold uint
-
-	// the following are supporting fields required for widget command
-	//
-	OutputFormatEnumInfo *assistant.EnumInfo[OutputFormatEnum]
-	OutputFormatEn       assistant.EnumValue[OutputFormatEnum]
-}
-
-const WidgetPsName = "widget-ps"
+const widgetPsName = "widget-ps"
 
 func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 	// to test: arcadia widget -d ./some-existing-file -p "P?<date>" -t 30
 	//
 	widgetCommand := &cobra.Command{
 		Use:   "widget",
-		Short: "widget sub command",
-		Long:  "Long description of the widget command",
+		Short: xi18n.Text(i18n.WidgetCmdShortDescTemplData{}),
+		Long:  xi18n.Text(i18n.WidgetCmdLongDescTemplData{}),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var appErr error
 
-			ps := container.MustGetParamSet(WidgetPsName).(*assistant.ParamSet[WidgetParameterSet]) //nolint:errcheck // is Must call
+			ps := container.MustGetParamSet(widgetPsName).(domain.WidgetParamSetPtr) //nolint:errcheck // is Must call
 
 			if err := ps.Validate(); err == nil {
 				native := ps.Native
 
 				// rebind enum into native member
+				// (eventually, Format/OutputFormatEn will be combined into
+				// a single entity), see https://github.com/snivilised/cobrass/issues/147
 				//
-				native.Format = native.OutputFormatEn.Value()
+				native.Format = native.FormatEn.Value()
 
 				// optionally invoke cross field validation
 				//
-				if xv := ps.CrossValidate(func(ps *WidgetParameterSet) error {
-					condition := (ps.Format == XMLFormatEn)
+				if xv := ps.CrossValidate(func(ps *domain.WidgetParameterSet) error {
+					condition := (ps.Format == domain.XMLFormatEn)
 					if condition {
 						return nil
 					}
-					return fmt.Errorf("format: '%v' is invalid", ps.Format)
+					return fmt.Errorf("format: '%v' is not currently supported", ps.Format)
 				}); xv == nil {
 					options := []string{}
 					cmd.Flags().Visit(func(f *pflag.Flag) {
@@ -73,10 +59,8 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 					fmt.Printf("%v %v Running widget, with options: '%v', args: '%v'\n",
 						AppEmoji, ApplicationName, options, args,
 					)
-					// ---> execute application core with the parameter set (native)
-					//
-					// appErr = runApplication(native)
-					//
+
+					appErr = domain.EnterWidget(native)
 				} else {
 					return xv
 				}
@@ -88,9 +72,8 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 		},
 	}
 
-	defaultDirectory := "/foo-bar"
-
-	paramSet := assistant.NewParamSet[WidgetParameterSet](widgetCommand)
+	defaultDirectory := "/default-directory"
+	paramSet := assistant.NewParamSet[domain.WidgetParameterSet](widgetCommand)
 	paramSet.BindValidatedString(
 		assistant.NewFlagInfo("directory", "d", defaultDirectory),
 		&paramSet.Native.Directory,
@@ -109,20 +92,13 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 		},
 	)
 
-	paramSet.Native.OutputFormatEnumInfo = assistant.NewEnumInfo(assistant.AcceptableEnumValues[OutputFormatEnum]{
-		XMLFormatEn:      []string{"xml", "x"},
-		JSONFormatEn:     []string{"json", "j"},
-		TextFormatEn:     []string{"text", "tx"},
-		ScribbleFormatEn: []string{"scribble", "scribbler", "scr"},
-	})
-
-	paramSet.Native.OutputFormatEn = paramSet.Native.OutputFormatEnumInfo.NewValue()
+	paramSet.Native.FormatEn = domain.OutputFormatEnumInfo.NewValue()
 
 	paramSet.BindValidatedEnum(
 		assistant.NewFlagInfo("format", "f", "xml"),
-		&paramSet.Native.OutputFormatEn.Source,
+		&paramSet.Native.FormatEn.Source,
 		func(value string) error {
-			if paramSet.Native.OutputFormatEnumInfo.En(value) == XMLFormatEn {
+			if domain.OutputFormatEnumInfo.En(value) == domain.XMLFormatEn {
 				return nil
 			}
 			return fmt.Errorf(
@@ -174,7 +150,7 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 	// carefully.)
 	//
 	container.MustRegisterRootedCommand(widgetCommand)
-	container.MustRegisterParamSet(WidgetPsName, paramSet)
+	container.MustRegisterParamSet(widgetPsName, paramSet)
 
 	return widgetCommand
 }
