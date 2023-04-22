@@ -42,6 +42,11 @@ jobs:
           auto-check
         shell: bash
 
+      - name: Go Format
+        run: |
+          go fmt ./...
+        shell: bash
+
       - name: Clean up redundant scripts
         run: |
           rm -fv .github/workflows/auto-check-workflow.yml 2>/dev/null
