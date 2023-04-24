@@ -1,10 +1,12 @@
 package i18n
 
 import (
-	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"github.com/snivilised/extendio/i18n"
 )
 
-// 🧊 RootCmdShortDesc
+// 🧊 Root Cmd Short Description
+
+// RootCmdShortDescTemplData
 type RootCmdShortDescTemplData struct {
 	arcadiaTemplData
 }
@@ -17,7 +19,9 @@ func (td RootCmdShortDescTemplData) Message() *i18n.Message {
 	}
 }
 
-// 🧊 RootCmdLongDesc
+// 🧊 Root Cmd Long Description
+
+// RootCmdLongDescTemplData
 type RootCmdLongDescTemplData struct {
 	arcadiaTemplData
 }
@@ -35,7 +39,9 @@ func (td RootCmdLongDescTemplData) Message() *i18n.Message {
 	}
 }
 
-// 🧊 RootCmdConfigFileUsage
+// 🧊 Root Cmd Config File Usage
+
+// / RootCmdConfigFileUsageTemplData
 type RootCmdConfigFileUsageTemplData struct {
 	arcadiaTemplData
 	ConfigFileName string
@@ -49,6 +55,9 @@ func (td RootCmdConfigFileUsageTemplData) Message() *i18n.Message {
 	}
 }
 
+// 🧊 Root Cmd Lang Usage
+
+// RootCmdLangUsageTemplData
 type RootCmdLangUsageTemplData struct {
 	arcadiaTemplData
 }
@@ -61,7 +70,9 @@ func (td RootCmdLangUsageTemplData) Message() *i18n.Message {
 	}
 }
 
-// 🧊 WidgetCmdShortDesc
+// 🧊 Widget Cmd Short Description
+
+// WidgetCmdShortDescTemplData
 type WidgetCmdShortDescTemplData struct {
 	arcadiaTemplData
 }
@@ -74,7 +85,9 @@ func (td WidgetCmdShortDescTemplData) Message() *i18n.Message {
 	}
 }
 
-// 🧊 WidgetCmdLongDesc
+// 🧊 Widget Cmd Long Description
+
+// WidgetCmdLongDescTemplData
 type WidgetCmdLongDescTemplData struct {
 	arcadiaTemplData
 }
