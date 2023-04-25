@@ -8,6 +8,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/snivilised/cobrass/src/assistant"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"golang.org/x/text/language"
 
@@ -166,7 +167,7 @@ func (b *Bootstrap) buildRootCommand(container *assistant.CobraContainer) {
 		Usage:              xi18n.Text(i18n.RootCmdLangUsageTemplData{}),
 		Default:            xi18n.DefaultLanguage.Get().String(),
 		AlternativeFlagSet: root.PersistentFlags(),
-	}, &paramSet.Native.Language, func(value string) error {
+	}, &paramSet.Native.Language, func(value string, _ *pflag.Flag) error {
 		_, err := language.Parse(value)
 		return err
 	})

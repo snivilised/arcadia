@@ -77,7 +77,7 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 	paramSet.BindValidatedString(
 		assistant.NewFlagInfo("directory", "d", defaultDirectory),
 		&paramSet.Native.Directory,
-		func(value string) error {
+		func(value string, _ *pflag.Flag) error {
 			// ideally, we should check if the Flag has been explicitly set
 			//
 			if value == defaultDirectory {
@@ -97,7 +97,7 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 	paramSet.BindValidatedEnum(
 		assistant.NewFlagInfo("format", "f", "xml"),
 		&paramSet.Native.FormatEn.Source,
-		func(value string) error {
+		func(value string, _ *pflag.Flag) error {
 			if domain.OutputFormatEnumInfo.En(value) == domain.XMLFormatEn {
 				return nil
 			}
@@ -115,7 +115,7 @@ func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 	paramSet.BindValidatedString(
 		assistant.NewFlagInfo("pattern", "p", ""),
 		&paramSet.Native.Pattern,
-		func(value string) error {
+		func(value string, _ *pflag.Flag) error {
 			result := strings.Contains(value, "P?<date>") ||
 				(strings.Contains(value, "P?<d>") && strings.Contains(value, "P?<m>") &&
 					strings.Contains(value, "P?<m>"))
