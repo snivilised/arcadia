@@ -32,6 +32,11 @@ function auto-check() {
     return 1
   fi
 
+  update-source-id-variable-in-widget_cmd_test $repo $owner
+  if [ $? -ne 0 ]; then
+    return 1
+  fi
+
   update-arcadia-in-taskfile $repo $owner
   if [ $? -ne 0 ]; then
     return 1
@@ -137,8 +142,21 @@ function update-source-id-variable-in-translate-defs() {
   local folder=./src/i18n/
   local file_pattern=translate-defs.go
   local target="ArcadiaSourceID"
-  local replacement="${repo}SourceID"
+  local tc_repo="$(echo ${repo:0:1} | tr '[:lower:]' '[:upper:]')${repo:1}"
+  local replacement="${tc_repo}SourceID"
   update-all-generic "update-source-id-variable-in-translate-defs" $repo $owner $folder $file_pattern "$target" "$replacement"
+}
+
+function update-source-id-variable-in-widget_cmd_test() {
+  local repo=$1
+  local owner=$2
+  local folder=./src/app/command/
+  local file_pattern=widget_cmd_test.go
+  local target="ArcadiaSourceID"
+  local tc_repo="$(echo ${repo:0:1} | tr '[:lower:]' '[:upper:]')${repo:1}"
+  local replacement="${tc_repo}SourceID"
+
+  update-all-generic "update-source-id-variable-in-widget_cmd_test" $repo $owner $folder $file_pattern "$target" "$replacement"
 }
 
 function update-arcadia-in-taskfile() {
