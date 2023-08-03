@@ -103,8 +103,11 @@ The following documents manual changes required. Manual checklist:
 
 Unfortunately, github doesn't copy over the template project's settings to the client project, so these changes must be made manually:
 
-+ `setup branch protection rules`: require pull request
-+ `update project settings`: disable __Allow merge commits__ and __Allow squash merging__
+Under `Protect matching branches`
+
++ `Require a pull request before merging` ✅ _ENABLE_
++ `Require linear history` ✅ _ENABLE_
++ `Do not allow bypassing the above settings` ✅ _ENABLE_
 
 Of course, its up to the user what settings they use in their repo, these are just recommended as a matter of good practice.
 
