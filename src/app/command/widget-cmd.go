@@ -22,7 +22,7 @@ import (
 
 const widgetPsName = "widget-ps"
 
-func buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
+func (b *Bootstrap) buildWidgetCommand(container *assistant.CobraContainer) *cobra.Command {
 	// to test: arcadia widget -d ./some-existing-file -p "P?<date>" -t 30
 	//
 	widgetCommand := &cobra.Command{

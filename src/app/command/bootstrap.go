@@ -7,6 +7,7 @@ import (
 	"github.com/cubiest/jibberjabber"
 	"github.com/samber/lo"
 	"github.com/snivilised/cobrass/src/assistant"
+	"github.com/snivilised/cobrass/src/assistant/configuration"
 	ci18n "github.com/snivilised/cobrass/src/assistant/i18n"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -31,17 +32,52 @@ func (j *Jabber) Scan() language.Tag {
 	return language.MustParse(lang)
 }
 
+type ConfigInfo struct {
+	Name       string
+	ConfigType string
+	ConfigPath string
+	Viper      configuration.ViperConfig
+}
+
+type ConfigureOptions struct {
+	Detector LocaleDetector
+	Config   ConfigInfo
+}
+
+type ConfigureOptionFn func(*ConfigureOptions)
+
 // Bootstrap represents construct that performs start up of the cli
 // without resorting to the use of Go's init() mechanism and minimal
 // use of package global variables.
 type Bootstrap struct {
-	Detector  LocaleDetector
 	container *assistant.CobraContainer
+	options   ConfigureOptions
+}
+
+func (b *Bootstrap) prepare() {
+	home, err := os.UserHomeDir()
+	cobra.CheckErr(err)
+
+	b.options = ConfigureOptions{
+		Detector: &Jabber{},
+		Config: ConfigInfo{
+			Name:       ApplicationName,
+			ConfigType: "yaml",
+			ConfigPath: home,
+			Viper:      &configuration.GlobalViperConfig{},
+		},
+	}
 }
 
 // Root builds the command tree and returns the root command, ready
 // to be executed.
-func (b *Bootstrap) Root() *cobra.Command {
+func (b *Bootstrap) Root(options ...ConfigureOptionFn) *cobra.Command {
+	b.prepare()
+
+	for _, fo := range options {
+		fo(&b.options)
+	}
+
 	b.configure()
 
 	// all these string literals here should be made translate-able
@@ -60,48 +96,21 @@ func (b *Bootstrap) Root() *cobra.Command {
 	)
 
 	b.buildRootCommand(b.container)
-	buildWidgetCommand(b.container)
+	b.buildWidgetCommand(b.container)
 
 	return b.container.Root()
 }
 
-type configureOptions struct {
-	configFile *string
-}
+func (b *Bootstrap) configure() {
+	vc := b.options.Config.Viper
+	ci := b.options.Config
 
-type ConfigureOptionFn func(*configureOptions)
+	vc.SetConfigName(ci.Name)
+	vc.SetConfigType(ci.ConfigType)
+	vc.AddConfigPath(ci.ConfigPath)
+	vc.AutomaticEnv()
 
-func (b *Bootstrap) configure(options ...ConfigureOptionFn) {
-	var configFile string
-
-	o := configureOptions{
-		configFile: &configFile,
-	}
-	for _, fo := range options {
-		fo(&o)
-	}
-
-	if configFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(configFile)
-	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-
-		// Search config in home directory with name ".arcadia" (without extension).
-		// NB: 'arcadia' should be renamed as appropriate
-		//
-		viper.AddConfigPath(home)
-		viper.SetConfigType("yaml")
-		configName := fmt.Sprintf("%v.yml", ApplicationName)
-		viper.SetConfigName(configName)
-	}
-
-	viper.AutomaticEnv() // read in environment variables that match
-
-	// If a config file is found, read it in.
-	err := viper.ReadInConfig()
+	err := vc.ReadInConfig()
 
 	handleLangSetting()
 
@@ -166,15 +175,6 @@ func (b *Bootstrap) buildRootCommand(container *assistant.CobraContainer) {
 	//
 	root := container.Root()
 	paramSet := assistant.NewParamSet[RootParameterSet](root)
-
-	paramSet.BindString(&assistant.FlagInfo{
-		Name: "config",
-		Usage: xi18n.Text(i18n.RootCmdConfigFileUsageTemplData{
-			ConfigFileName: ApplicationName,
-		}),
-		Default:            "",
-		AlternativeFlagSet: root.PersistentFlags(),
-	}, &paramSet.Native.ConfigFile)
 
 	paramSet.BindValidatedString(&assistant.FlagInfo{
 		Name:               "lang",

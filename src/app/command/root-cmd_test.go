@@ -22,12 +22,14 @@ var _ = Describe("RootCmd", Ordered, func() {
 	})
 
 	It("🧪 should: execute", func() {
-		bootstrap := command.Bootstrap{
-			Detector: &DetectorStub{},
-		}
+		bootstrap := command.Bootstrap{}
 		tester := helpers.CommandTester{
 			Args: []string{},
-			Root: bootstrap.Root(),
+			Root: bootstrap.Root(func(co *command.ConfigureOptions) {
+				co.Detector = &DetectorStub{}
+				co.Config.Name = configName
+				co.Config.ConfigPath = configPath
+			}),
 		}
 		_, err := tester.Execute()
 		Expect(err).Error().To(BeNil())
