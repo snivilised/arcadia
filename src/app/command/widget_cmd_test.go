@@ -5,6 +5,7 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"github.com/spf13/cobra"
 
 	"github.com/snivilised/arcadia/src/app/command"
 	"github.com/snivilised/arcadia/src/i18n"
@@ -17,8 +18,10 @@ import (
 
 var _ = Describe("WidgetCmd", Ordered, func() {
 	var (
-		repo     string
-		l10nPath string
+		repo        string
+		l10nPath    string
+		bootstrap   command.Bootstrap
+		rootCommand *cobra.Command
 	)
 
 	BeforeAll(func() {
@@ -49,16 +52,19 @@ var _ = Describe("WidgetCmd", Ordered, func() {
 		if err != nil {
 			Fail(err.Error())
 		}
+		bootstrap = command.Bootstrap{}
+		rootCommand = bootstrap.Root(func(co *command.ConfigureOptions) {
+			co.Detector = &DetectorStub{}
+			co.Config.Name = configName
+			co.Config.ConfigPath = configPath
+		})
 	})
 
 	When("specified flags are valid", func() {
 		It("🧪 should: execute without error", func() {
-			bootstrap := command.Bootstrap{
-				Detector: &DetectorStub{},
-			}
 			tester := helpers.CommandTester{
 				Args: []string{"widget", "-p", "P?<date>", "-t", "42"},
-				Root: bootstrap.Root(),
+				Root: rootCommand,
 			}
 			_, err := tester.Execute()
 			Expect(err).Error().To(BeNil(),
@@ -69,12 +75,9 @@ var _ = Describe("WidgetCmd", Ordered, func() {
 
 	When("specified flags are valid", func() {
 		It("🧪 should: return error due to option validation failure", func() {
-			bootstrap := command.Bootstrap{
-				Detector: &DetectorStub{},
-			}
 			tester := helpers.CommandTester{
 				Args: []string{"widget", "-p", "P?<date>", "-t", "99"},
-				Root: bootstrap.Root(),
+				Root: rootCommand,
 			}
 			_, err := tester.Execute()
 			Expect(err).Error().NotTo(BeNil(),

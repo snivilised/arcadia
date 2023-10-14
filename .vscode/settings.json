@@ -29,6 +29,7 @@
     "linters",
     "nakedret",
     "nolintlint",
+    "nosec",
     "pixa",
     "prealloc",
     "repotoken",
