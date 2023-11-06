@@ -6,7 +6,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.13.0
 	github.com/onsi/gomega v1.29.0
 	github.com/samber/lo v1.38.1
-	github.com/snivilised/extendio v0.3.0
+	github.com/snivilised/extendio v0.3.1
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.17.0
 	go.uber.org/zap v1.26.0
@@ -36,7 +36,7 @@ require (
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
-	github.com/nicksnyder/go-i18n/v2 v2.2.1 // indirect
+	github.com/nicksnyder/go-i18n/v2 v2.2.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
 	github.com/snivilised/cobrass v0.3.4
 	github.com/spf13/afero v1.10.0 // indirect
