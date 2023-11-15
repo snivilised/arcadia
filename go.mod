@@ -3,7 +3,7 @@ module github.com/snivilised/arcadia
 go 1.21
 
 require (
-	github.com/onsi/ginkgo/v2 v2.13.0
+	github.com/onsi/ginkgo/v2 v2.13.1
 	github.com/onsi/gomega v1.30.0
 	github.com/samber/lo v1.38.1
 	github.com/snivilised/extendio v0.3.1
