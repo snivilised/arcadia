@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/onsi/ginkgo/v2 v2.13.1
 	github.com/onsi/gomega v1.30.0
-	github.com/samber/lo v1.38.1
+	github.com/samber/lo v1.39.0
 	github.com/snivilised/extendio v0.3.1
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/viper v1.17.0
