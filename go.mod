@@ -6,14 +6,13 @@ require (
 	github.com/onsi/ginkgo/v2 v2.13.2
 	github.com/onsi/gomega v1.30.0
 	github.com/samber/lo v1.39.0
-	github.com/snivilised/extendio v0.4.0
+	github.com/snivilised/extendio v0.5.1
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/viper v1.18.2
 	go.uber.org/zap v1.26.0
 )
 
 require (
-	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/go-logr/logr v1.3.0 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
@@ -36,7 +35,7 @@ require (
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
-	github.com/nicksnyder/go-i18n/v2 v2.2.2 // indirect
+	github.com/nicksnyder/go-i18n/v2 v2.3.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
 	github.com/snivilised/cobrass v0.3.6
 	github.com/spf13/afero v1.11.0 // indirect
