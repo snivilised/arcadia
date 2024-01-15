@@ -3,7 +3,7 @@ module github.com/snivilised/arcadia
 go 1.21
 
 require (
-	github.com/onsi/ginkgo/v2 v2.13.2
+	github.com/onsi/ginkgo/v2 v2.14.0
 	github.com/onsi/gomega v1.30.0
 	github.com/samber/lo v1.39.0
 	github.com/snivilised/extendio v0.5.1
@@ -24,7 +24,7 @@ require (
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20231006140011-7918f672742d // indirect
-	golang.org/x/tools v0.14.0 // indirect
+	golang.org/x/tools v0.16.1 // indirect
 )
 
 require (
