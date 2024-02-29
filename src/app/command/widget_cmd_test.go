@@ -3,8 +3,8 @@ package command_test
 import (
 	"fmt"
 
-	. "github.com/onsi/ginkgo/v2"
-	. "github.com/onsi/gomega"
+	. "github.com/onsi/ginkgo/v2" //nolint:revive // ok for testing
+	. "github.com/onsi/gomega"    //nolint:revive // ok for testing
 	"github.com/spf13/cobra"
 
 	"github.com/snivilised/arcadia/src/app/command"
@@ -25,8 +25,8 @@ var _ = Describe("WidgetCmd", Ordered, func() {
 	)
 
 	BeforeAll(func() {
-		repo = helpers.Repo("../../..")
-		l10nPath = helpers.Path(repo, "src/test/data/l10n")
+		repo = helpers.Repo("")
+		l10nPath = helpers.Path(repo, "test/data/l10n")
 		Expect(utils.FolderExists(l10nPath)).To(BeTrue(),
 			fmt.Sprintf("💥 l10Path: '%v' does not exist", l10nPath),
 		)

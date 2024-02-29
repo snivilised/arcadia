@@ -83,11 +83,13 @@ func (b *Bootstrap) buildWidgetCommand(container *assistant.CobraContainer) *cob
 			if value == defaultDirectory {
 				return nil
 			}
+
 			if _, err := os.Stat(value); err != nil {
 				if os.IsNotExist(err) {
 					return err
 				}
 			}
+
 			return nil
 		},
 	)
@@ -101,6 +103,7 @@ func (b *Bootstrap) buildWidgetCommand(container *assistant.CobraContainer) *cob
 			if domain.OutputFormatEnumInfo.En(value) == domain.XMLFormatEn {
 				return nil
 			}
+
 			return fmt.Errorf(
 				"only xml format is currently supported, other formats available in future release",
 			)
