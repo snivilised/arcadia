@@ -1,8 +1,8 @@
 package command_test
 
 import (
-	. "github.com/onsi/ginkgo/v2"
-	. "github.com/onsi/gomega"
+	. "github.com/onsi/ginkgo/v2" //nolint:revive // ok for testing
+	. "github.com/onsi/gomega"    //nolint:revive // ok for testing
 
 	"github.com/snivilised/arcadia/src/app/command"
 	"github.com/snivilised/arcadia/src/internal/helpers"
@@ -16,7 +16,7 @@ var _ = Describe("RootCmd", Ordered, func() {
 	)
 
 	BeforeAll(func() {
-		repo = helpers.Repo("../..")
+		repo = helpers.Repo("")
 		l10nPath = helpers.Path(repo, "test/data/l10n")
 		Expect(utils.FolderExists(l10nPath)).To(BeTrue())
 	})

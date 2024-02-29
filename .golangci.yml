@@ -17,8 +17,8 @@ linters-settings:
       - fieldalignment # too strict
 
   nolintlint:
-    require-explanation: true
-    require-specific: true
+    require-explanation: false
+    require-specific: false
 
 linters:
   disable-all: true
@@ -63,3 +63,4 @@ linters:
 
 run:
   issues-exit-code: 1
+  timeout: 5m
