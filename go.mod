@@ -3,8 +3,9 @@ module github.com/snivilised/arcadia
 go 1.21
 
 require (
-	github.com/onsi/ginkgo/v2 v2.16.0
+	github.com/onsi/ginkgo/v2 v2.17.1
 	github.com/onsi/gomega v1.31.1
+	github.com/pkg/errors v0.9.1
 	github.com/samber/lo v1.39.0
 	github.com/snivilised/extendio v0.6.1
 	github.com/spf13/cobra v1.8.0
@@ -19,7 +20,6 @@ require (
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/pprof v0.0.0-20240130152714-0ed6a68c8d9e // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
