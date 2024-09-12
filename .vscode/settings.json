@@ -5,17 +5,21 @@
   ],
   "cSpell.words": [
     "bodyclose",
+    "cmds",
     "cobrass",
+    "coverpkg",
     "coverprofile",
     "cubiest",
     "deadcode",
     "depguard",
     "dogsled",
+    "dotenv",
     "dupl",
     "errcheck",
     "exportloopref",
     "extendio",
     "fieldalignment",
+    "GOARCH",
     "goconst",
     "gocritic",
     "gocyclo",
@@ -39,6 +43,7 @@
     "nolintlint",
     "nosec",
     "onsi",
+    "outdir",
     "pixa",
     "prealloc",
     "repotoken",
@@ -54,6 +59,7 @@
     "typecheck",
     "unconvert",
     "unparam",
-    "varcheck"
+    "varcheck",
+    "watchv"
   ]
 }
