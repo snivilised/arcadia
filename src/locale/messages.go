@@ -1,7 +1,8 @@
 package locale
 
 import (
-	"github.com/snivilised/extendio/i18n"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"github.com/snivilised/li18ngo"
 )
 
 // ❌ FooBar
@@ -27,26 +28,14 @@ func (td FooBarTemplData) Message() *i18n.Message {
 	}
 }
 
-// FooBarErrorBehaviourQuery used to query if an error is:
-// "Failed to read directory contents from the path specified"
-type FooBarErrorBehaviourQuery interface {
-	FooBar() bool
-}
-
 type FooBarError struct {
-	i18n.LocalisableError
-}
-
-// FooBar enables the client to check if error is FooBarError
-// via FooBarErrorBehaviourQuery
-func (e FooBarError) FooBar() bool {
-	return true
+	li18ngo.LocalisableError
 }
 
 // NewFooBarError creates a FooBarError
 func NewFooBarError(path string, reason error) FooBarError {
 	return FooBarError{
-		LocalisableError: i18n.LocalisableError{
+		LocalisableError: li18ngo.LocalisableError{
 			Data: FooBarTemplData{
 				Path:   path,
 				Reason: reason,

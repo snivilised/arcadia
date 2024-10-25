@@ -1,7 +1,7 @@
 package locale_test
 
 import (
-	"github.com/snivilised/extendio/i18n"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
 const (
