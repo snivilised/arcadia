@@ -10,10 +10,10 @@ import (
 	"github.com/snivilised/arcadia/src/app/command"
 	"github.com/snivilised/arcadia/src/internal/helpers"
 	"github.com/snivilised/arcadia/src/locale"
-	xi18n "github.com/snivilised/extendio/i18n"
-	"github.com/snivilised/extendio/xfs/utils"
+	"github.com/snivilised/li18ngo"
+	nef "github.com/snivilised/nefilim"
 
-	ci18n "github.com/snivilised/cobrass/src/assistant/i18n"
+	ci18n "github.com/snivilised/cobrass/src/assistant/locale"
 )
 
 var _ = Describe("WidgetCmd", Ordered, func() {
@@ -27,22 +27,22 @@ var _ = Describe("WidgetCmd", Ordered, func() {
 	BeforeAll(func() {
 		repo = helpers.Repo("")
 		l10nPath = helpers.Path(repo, "test/data/l10n")
-		Expect(utils.FolderExists(l10nPath)).To(BeTrue(),
+		fS := nef.NewUniversalABS()
+		Expect(fS.DirectoryExists(l10nPath)).To(BeTrue(),
 			fmt.Sprintf("💥 l10Path: '%v' does not exist", l10nPath),
 		)
 	})
 
 	BeforeEach(func() {
-		xi18n.ResetTx()
-		err := xi18n.Use(func(uo *xi18n.UseOptions) {
-			uo.From = xi18n.LoadFrom{
+		err := li18ngo.Use(func(uo *li18ngo.UseOptions) {
+			uo.From = li18ngo.LoadFrom{
 				Path: l10nPath,
-				Sources: xi18n.TranslationFiles{
-					locale.ArcadiaSourceID: xi18n.TranslationSource{
+				Sources: li18ngo.TranslationFiles{
+					locale.ArcadiaSourceID: li18ngo.TranslationSource{
 						Name: "pixa",
 					},
 
-					ci18n.CobrassSourceID: xi18n.TranslationSource{
+					ci18n.CobrassSourceID: li18ngo.TranslationSource{
 						Name: "cobrass",
 					},
 				},

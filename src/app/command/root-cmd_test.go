@@ -6,7 +6,7 @@ import (
 
 	"github.com/snivilised/arcadia/src/app/command"
 	"github.com/snivilised/arcadia/src/internal/helpers"
-	"github.com/snivilised/extendio/xfs/utils"
+	nef "github.com/snivilised/nefilim"
 )
 
 var _ = Describe("RootCmd", Ordered, func() {
@@ -18,7 +18,8 @@ var _ = Describe("RootCmd", Ordered, func() {
 	BeforeAll(func() {
 		repo = helpers.Repo("")
 		l10nPath = helpers.Path(repo, "test/data/l10n")
-		Expect(utils.FolderExists(l10nPath)).To(BeTrue())
+		fS := nef.NewUniversalABS()
+		Expect(fS.DirectoryExists(l10nPath)).To(BeTrue())
 	})
 
 	It("🧪 should: execute", func() {

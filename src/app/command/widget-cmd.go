@@ -6,10 +6,9 @@ import (
 	"strings"
 
 	"github.com/snivilised/cobrass/src/assistant"
+	"github.com/snivilised/li18ngo"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-
-	xi18n "github.com/snivilised/extendio/i18n"
 
 	"github.com/snivilised/arcadia/src/app/domain"
 	"github.com/snivilised/arcadia/src/locale"
@@ -27,8 +26,8 @@ func (b *Bootstrap) buildWidgetCommand(container *assistant.CobraContainer) *cob
 	//
 	widgetCommand := &cobra.Command{
 		Use:   "widget",
-		Short: xi18n.Text(locale.WidgetCmdShortDescTemplData{}),
-		Long:  xi18n.Text(locale.WidgetCmdLongDescTemplData{}),
+		Short: li18ngo.Text(locale.WidgetCmdShortDescTemplData{}),
+		Long:  li18ngo.Text(locale.WidgetCmdLongDescTemplData{}),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var appErr error
 

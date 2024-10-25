@@ -9,7 +9,7 @@ import (
 	"github.com/snivilised/arcadia/src/locale"
 	"github.com/snivilised/cobrass/src/assistant"
 	"github.com/snivilised/cobrass/src/assistant/configuration"
-	ci18n "github.com/snivilised/cobrass/src/assistant/i18n"
+	ci18n "github.com/snivilised/cobrass/src/assistant/locale"
 	"github.com/snivilised/li18ngo"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
