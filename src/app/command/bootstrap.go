@@ -6,16 +6,15 @@ import (
 
 	"github.com/cubiest/jibberjabber"
 	"github.com/samber/lo"
+	"github.com/snivilised/arcadia/src/locale"
 	"github.com/snivilised/cobrass/src/assistant"
 	"github.com/snivilised/cobrass/src/assistant/configuration"
 	ci18n "github.com/snivilised/cobrass/src/assistant/i18n"
+	"github.com/snivilised/li18ngo"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"golang.org/x/text/language"
-
-	"github.com/snivilised/arcadia/src/locale"
-	xi18n "github.com/snivilised/extendio/i18n"
 )
 
 type LocaleDetector interface {
@@ -86,8 +85,8 @@ func (b *Bootstrap) Root(options ...ConfigureOptionFn) *cobra.Command {
 	b.container = assistant.NewCobraContainer(
 		&cobra.Command{
 			Use:     "main",
-			Short:   xi18n.Text(locale.RootCmdShortDescTemplData{}),
-			Long:    xi18n.Text(locale.RootCmdLongDescTemplData{}),
+			Short:   li18ngo.Text(locale.RootCmdShortDescTemplData{}),
+			Long:    li18ngo.Text(locale.RootCmdLongDescTemplData{}),
 			Version: fmt.Sprintf("'%v'", Version),
 			// Uncomment the following line if your bare application
 			// has an action associated with it:
@@ -115,7 +114,7 @@ func (b *Bootstrap) configure() {
 	handleLangSetting()
 
 	if err != nil {
-		msg := xi18n.Text(locale.UsingConfigFileTemplData{
+		msg := li18ngo.Text(locale.UsingConfigFileTemplData{
 			ConfigFileName: viper.ConfigFileUsed(),
 		})
 		fmt.Fprintln(os.Stderr, msg)
@@ -136,15 +135,15 @@ func handleLangSetting() {
 			return parsedTag
 		},
 		func() language.Tag {
-			return xi18n.DefaultLanguage.Get()
+			return li18ngo.DefaultLanguage
 		},
 	)
 
-	err := xi18n.Use(func(uo *xi18n.UseOptions) {
+	err := li18ngo.Use(func(uo *li18ngo.UseOptions) {
 		uo.Tag = tag
-		uo.From = xi18n.LoadFrom{
-			Sources: xi18n.TranslationFiles{
-				SourceID: xi18n.TranslationSource{Name: ApplicationName},
+		uo.From = li18ngo.LoadFrom{
+			Sources: li18ngo.TranslationFiles{
+				SourceID: li18ngo.TranslationSource{Name: ApplicationName},
 
 				// By adding in the source for cobrass, we relieve the client from having
 				// to do this. After-all, it should be taken as read that since any
@@ -157,7 +156,7 @@ func handleLangSetting() {
 				// can see below, that is the name assigned to the app name of the
 				// source.
 				//
-				ci18n.CobrassSourceID: xi18n.TranslationSource{Name: "cobrass"},
+				ci18n.CobrassSourceID: li18ngo.TranslationSource{Name: "cobrass"},
 			},
 		}
 	})
@@ -178,8 +177,8 @@ func (b *Bootstrap) buildRootCommand(container *assistant.CobraContainer) {
 
 	paramSet.BindValidatedString(&assistant.FlagInfo{
 		Name:               "lang",
-		Usage:              xi18n.Text(locale.RootCmdLangUsageTemplData{}),
-		Default:            xi18n.DefaultLanguage.Get().String(),
+		Usage:              li18ngo.Text(locale.RootCmdLangUsageTemplData{}),
+		Default:            li18ngo.DefaultLanguage.String(),
 		AlternativeFlagSet: root.PersistentFlags(),
 	}, &paramSet.Native.Language, func(value string, _ *pflag.Flag) error {
 		_, err := language.Parse(value)

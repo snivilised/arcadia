@@ -5,7 +5,7 @@ import (
 	. "github.com/onsi/gomega"    //nolint:revive // ok for testing
 	"github.com/snivilised/arcadia/src/app/command"
 	"github.com/snivilised/arcadia/src/internal/helpers"
-	"github.com/snivilised/extendio/xfs/utils"
+	nef "github.com/snivilised/nefilim"
 
 	"golang.org/x/text/language"
 )
@@ -32,7 +32,8 @@ var _ = Describe("Bootstrap", Ordered, func() {
 	BeforeAll(func() {
 		repo = helpers.Repo("")
 		l10nPath = helpers.Path(repo, "test/data/l10n")
-		Expect(utils.FolderExists(l10nPath)).To(BeTrue())
+		fS := nef.NewUniversalABS()
+		Expect(fS.DirectoryExists(l10nPath)).To(BeTrue())
 	})
 
 	Context("given: root defined with widget sub-command", func() {
