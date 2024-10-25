@@ -14,7 +14,7 @@ import (
 	"github.com/spf13/viper"
 	"golang.org/x/text/language"
 
-	"github.com/snivilised/arcadia/src/i18n"
+	"github.com/snivilised/arcadia/src/locale"
 	xi18n "github.com/snivilised/extendio/i18n"
 )
 
@@ -86,8 +86,8 @@ func (b *Bootstrap) Root(options ...ConfigureOptionFn) *cobra.Command {
 	b.container = assistant.NewCobraContainer(
 		&cobra.Command{
 			Use:     "main",
-			Short:   xi18n.Text(i18n.RootCmdShortDescTemplData{}),
-			Long:    xi18n.Text(i18n.RootCmdLongDescTemplData{}),
+			Short:   xi18n.Text(locale.RootCmdShortDescTemplData{}),
+			Long:    xi18n.Text(locale.RootCmdLongDescTemplData{}),
 			Version: fmt.Sprintf("'%v'", Version),
 			// Uncomment the following line if your bare application
 			// has an action associated with it:
@@ -115,7 +115,7 @@ func (b *Bootstrap) configure() {
 	handleLangSetting()
 
 	if err != nil {
-		msg := xi18n.Text(i18n.UsingConfigFileTemplData{
+		msg := xi18n.Text(locale.UsingConfigFileTemplData{
 			ConfigFileName: viper.ConfigFileUsed(),
 		})
 		fmt.Fprintln(os.Stderr, msg)
@@ -178,7 +178,7 @@ func (b *Bootstrap) buildRootCommand(container *assistant.CobraContainer) {
 
 	paramSet.BindValidatedString(&assistant.FlagInfo{
 		Name:               "lang",
-		Usage:              xi18n.Text(i18n.RootCmdLangUsageTemplData{}),
+		Usage:              xi18n.Text(locale.RootCmdLangUsageTemplData{}),
 		Default:            xi18n.DefaultLanguage.Get().String(),
 		AlternativeFlagSet: root.PersistentFlags(),
 	}, &paramSet.Native.Language, func(value string, _ *pflag.Flag) error {

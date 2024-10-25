@@ -12,7 +12,7 @@ import (
 	xi18n "github.com/snivilised/extendio/i18n"
 
 	"github.com/snivilised/arcadia/src/app/domain"
-	"github.com/snivilised/arcadia/src/i18n"
+	"github.com/snivilised/arcadia/src/locale"
 )
 
 // CLIENT-TODO: rename this widget command to something required
@@ -27,8 +27,8 @@ func (b *Bootstrap) buildWidgetCommand(container *assistant.CobraContainer) *cob
 	//
 	widgetCommand := &cobra.Command{
 		Use:   "widget",
-		Short: xi18n.Text(i18n.WidgetCmdShortDescTemplData{}),
-		Long:  xi18n.Text(i18n.WidgetCmdLongDescTemplData{}),
+		Short: xi18n.Text(locale.WidgetCmdShortDescTemplData{}),
+		Long:  xi18n.Text(locale.WidgetCmdLongDescTemplData{}),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var appErr error
 
