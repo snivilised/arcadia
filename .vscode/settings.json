@@ -39,6 +39,7 @@
     "linters",
     "mattn",
     "nakedret",
+    "nicksnyder",
     "nolint",
     "nolintlint",
     "nosec",
