@@ -9,7 +9,7 @@ import (
 
 // FooBarTemplData - TODO: this is a none existent error that should be
 // replaced by the client. Its just defined here to illustrate the pattern
-// that should be used to implement i18n with extendio. Also note,
+// that should be used to implement i18n with li18ngo. Also note,
 // that this message has been removed from the translation files, so
 // it is not useable at run time.
 type FooBarTemplData struct {
