@@ -82,8 +82,8 @@ github.com/snivilised/cobrass v0.5.0 h1:mjoxyO2e17d7vPRHm9s0QrfRvL2ybGs0HzuQSngy
 github.com/snivilised/cobrass v0.5.0/go.mod h1:nm1jWE7F6i5R8eRlnWv3mzLFjutXIZs2vo5At5RS+TY=
 github.com/snivilised/li18ngo v0.1.7 h1:XRYpmP7jSAxzRyg5WH0PViFb9ycWGFcDkQQqd2GsjzQ=
 github.com/snivilised/li18ngo v0.1.7/go.mod h1:NVOexqt/aIhnenNPQDqbJchLNte92io87j5o2l+HNqs=
-github.com/snivilised/nefilim v0.1.7 h1:T7ekCkLCrDVcTCeodgomX/sehNIRsGNN+aiv/u5Yn+E=
-github.com/snivilised/nefilim v0.1.7/go.mod h1:+4/hKxgfvE8eNjLMJC+3ropEZSQuiR/NqfPtIuw7ZMw=
+github.com/snivilised/nefilim v0.1.10 h1:j8EGMZSGgFIjcxaVOvYvn7/r66Q5ffXihmq52F55r/E=
+github.com/snivilised/nefilim v0.1.10/go.mod h1:xcQnPeB+zVD+xgw9yzy0QiMTGqjYNEWKeoaZL0TBQeA=
 github.com/sourcegraph/conc v0.3.0 h1:OQTbbt6P72L20UqAkXXuLOj79LfEanQ+YQFNpLA9ySo=
 github.com/sourcegraph/conc v0.3.0/go.mod h1:Sdozi7LEKbFPqYX2/J+iBAM6HpqSLTASQIKqDmF7Mt0=
 github.com/spf13/afero v1.11.0 h1:WJQKhtpdm3v2IzqG8VMqrr6Rf3UYpEF239Jy9wNepM8=
