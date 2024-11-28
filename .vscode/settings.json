@@ -4,6 +4,7 @@
     "--fast"
   ],
   "cSpell.words": [
+    "astrolib",
     "bodyclose",
     "cmds",
     "cobrass",
@@ -57,6 +58,7 @@
     "staticcheck",
     "structcheck",
     "stylecheck",
+    "taskfile",
     "thelper",
     "toplevel",
     "tparallel",

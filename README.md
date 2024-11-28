@@ -125,13 +125,13 @@ Of course, its up to the user what settings they use in their repo, these are ju
 
 ### 🌐 l10n Translations
 
-This template has been setup to support localisation. The default language is `en-GB` with support for `en-US`. There is a translation file for `en-US` defined as __src/i18n/deploy/arcadia.active.en-US.json__. This is the initial translation for `en-US` that should be deployed with the app.
+This template has been setup to support localisation. The default language is `en-GB` with support for `en-US`. There is a translation file for `en-US` defined as __locale/i18n/deploy/arcadia.active.en-US.json__. This is the initial translation for `en-US` that should be deployed with the app.
 
 Make sure that the go-i18n package has been installed so that it can be invoked as cli, see [go-i18n](https://github.com/nicksnyder/go-i18n) for installation instructions.
 
 To maintain localisation of the application, the user must take care to implement all steps to ensure translate-ability of all user facing messages. Whenever there is a need to add/change user facing messages including error messages, to maintain this state, the user must:
 
-+ define template struct (__xxxTemplData__) in __src/i18n/messages.go__ and corresponding __Message()__ method. All messages are defined here in the same location, simplifying the message extraction process as all extractable strings occur at the same place. Please see [go-i18n](https://github.com/nicksnyder/go-i18n) for all translation/pluralisation options and other regional sensitive content.
++ define template struct (__xxxTemplData__) in __locale/i18n/messages.go__ and corresponding __Message()__ method. All messages are defined here in the same location, simplifying the message extraction process as all extractable strings occur at the same place. Please see [go-i18n](https://github.com/nicksnyder/go-i18n) for all translation/pluralisation options and other regional sensitive content.
 
 For more detailed workflow instructions relating to i18n, please see [i18n README](./resources/doc/i18n-README.md)
 
