@@ -24,7 +24,7 @@ coverage.html
 dist/
 .task/
 
-src/i18n/out/en-US/active.en-GB.json
+locale/i18n/out/en-US/active.en-GB.json
 test/data/research/scientist/
 
 .DS_Store

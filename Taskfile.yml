@@ -6,8 +6,8 @@ dotenv: [".env"]
 vars:
   FORMAT: json
   BINARY_NAME: arcadia
-  DEPLOY_DIR: ./src/i18n/deploy
-  OUT_DIR: ./src/i18n/out
+  DEPLOY_DIR: ./locale/i18n/deploy
+  OUT_DIR: ./locale/i18n/out
   DIST_DIR: ./dist
   #
   SOURCE_LANG: en-GB
@@ -261,7 +261,7 @@ tasks:
   # with the new translations. Also, need to copy the default
   # file (active.en-GB.json) back into ./i18n/default
   #
-  # creates ./src/i18n/out/en-US/translate.en-US.json: this is the
+  # creates ./locale/i18n/out/en-US/translate.en-US.json: this is the
   # file to be translated. This contains hashes and also contains
   # all messages, not just the ones added.
   # It is useful to keep all the out file also checked in because, what we

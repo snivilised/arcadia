@@ -16,8 +16,8 @@ The local directory structure is as follows:
 
 __goi18n__ instructs the user to manually create an empty translation message file that they want to add (eg `translate.en-US.json`). This is taken care of by the __newt__ task. Then the requirement is to run the goi18n merge \<active\> command (goi18n merge `arcadia.active.en-US.json` `arcadia.translate.en-US.json`). This has been wrapped up into the __merge__ task and the result is that the translation file `arcadia.translation.en-US.json` is populated with the messages to be translated. So the sequence goes:
 
-- run __newt__ task: (generates default language file `./src/i18n/out/active.en-GB.json` and empty `./src/i18n/out/us-US/arcadia.translation.en-US.json` file). This task can be run from the root folder, __goi18n__ will recursively search the directory tree for files with translate-able content, ie files with template definitions (___i18n.Message___)
-- run __merge__ task: derives a translation file for the requested language __en-US__ using 2 files as inputs: source active file (`./src/i18n/out/active.en-GB.json`) and the empty __en-US__ translate file (`./src/i18n/out/us-US/arcadia.translation.en-US.json`), both of which were generated in the previous step.
+- run __newt__ task: (generates default language file `./locale/i18n/out/active.en-GB.json` and empty `./locale/i18n/out/us-US/arcadia.translation.en-US.json` file). This task can be run from the root folder, __goi18n__ will recursively search the directory tree for files with translate-able content, ie files with template definitions (___i18n.Message___)
+- run __merge__ task: derives a translation file for the requested language __en-US__ using 2 files as inputs: source active file (`./locale/i18n/out/active.en-GB.json`) and the empty __en-US__ translate file (`./locale/i18n/out/us-US/arcadia.translation.en-US.json`), both of which were generated in the previous step.
 - hand the translate file to your translator for them to translate
 - rename the translate file to the active equivalent (`arcadia.translation.en-US.json`). Save this into the __deploy__ folder. This file will be deployed with the application.
 
@@ -56,17 +56,17 @@ Inputs:
 
 Outputs:
 
-- ./src/i18n/out/active.en-GB.json (messages extracted from code, without hashes)
-- ./src/i18n/out/en-US/translate.en-US.json (empty)
+- ./locale/i18n/out/active.en-GB.json (messages extracted from code, without hashes)
+- ./locale/i18n/out/en-US/translate.en-US.json (empty)
 
 ### 💠 merge
 
 Inputs:
 
-- ./src/i18n/out/active.en-GB.json
-- ./src/i18n/out/en-US/arcadia.translate-en-US.json
+- ./locale/i18n/out/active.en-GB.json
+- ./locale/i18n/out/en-US/arcadia.translate-en-US.json
 
 Outputs:
 
-- ./src/i18n/out/active.en-US.json
-- ./src/i18n/out/translate.en-US.json
+- ./locale/i18n/out/active.en-US.json
+- ./locale/i18n/out/translate.en-US.json
