@@ -38,7 +38,7 @@ require (
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
-	github.com/nicksnyder/go-i18n/v2 v2.4.1
+	github.com/nicksnyder/go-i18n/v2 v2.5.0
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/snivilised/cobrass v0.5.0
 	github.com/spf13/afero v1.11.0 // indirect
