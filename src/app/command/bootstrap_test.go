@@ -1,8 +1,8 @@
 package command_test
 
 import (
-	. "github.com/onsi/ginkgo/v2" //nolint:revive // ok for testing
-	. "github.com/onsi/gomega"    //nolint:revive // ok for testing
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
 	"github.com/snivilised/arcadia/src/app/command"
 	"github.com/snivilised/arcadia/src/internal/helpers"
 	nef "github.com/snivilised/nefilim"
@@ -15,6 +15,8 @@ const (
 	configPath = "../../test/data/configuration"
 )
 
+// DetectorStub is a test double that satisfies the LocaleDetector
+// interface and always returns British English.
 type DetectorStub struct {
 }
 

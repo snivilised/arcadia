@@ -6,7 +6,8 @@ import (
 
 // 🧊 Root Cmd Short Description
 
-// RootCmdShortDescTemplData
+// RootCmdShortDescTemplData provides template data for the short
+// description of the root command.
 type RootCmdShortDescTemplData struct {
 	arcadiaTemplData
 }
@@ -21,7 +22,8 @@ func (td RootCmdShortDescTemplData) Message() *i18n.Message {
 
 // 🧊 Root Cmd Long Description
 
-// RootCmdLongDescTemplData
+// RootCmdLongDescTemplData provides template data for the long
+// description of the root command.
 type RootCmdLongDescTemplData struct {
 	arcadiaTemplData
 }
@@ -41,9 +43,11 @@ func (td RootCmdLongDescTemplData) Message() *i18n.Message {
 
 // 🧊 Root Cmd Config File Usage
 
-// / RootCmdConfigFileUsageTemplData
+// RootCmdConfigFileUsageTemplData supplies template data for the
+// usage text of the root command's config file flag.
 type RootCmdConfigFileUsageTemplData struct {
 	arcadiaTemplData
+	// ConfigFileName represents the configuration file name.
 	ConfigFileName string
 }
 
@@ -57,7 +61,8 @@ func (td RootCmdConfigFileUsageTemplData) Message() *i18n.Message {
 
 // 🧊 Root Cmd Lang Usage
 
-// RootCmdLangUsageTemplData
+// RootCmdLangUsageTemplData provides template data for the language
+// flag usage text on the root command.
 type RootCmdLangUsageTemplData struct {
 	arcadiaTemplData
 }
@@ -72,7 +77,8 @@ func (td RootCmdLangUsageTemplData) Message() *i18n.Message {
 
 // 🧊 Widget Cmd Short Description
 
-// WidgetCmdShortDescTemplData
+// WidgetCmdShortDescTemplData provides template data for the short
+// description of the widget sub-command.
 type WidgetCmdShortDescTemplData struct {
 	arcadiaTemplData
 }
@@ -87,7 +93,8 @@ func (td WidgetCmdShortDescTemplData) Message() *i18n.Message {
 
 // 🧊 Widget Cmd Long Description
 
-// WidgetCmdLongDescTemplData
+// WidgetCmdLongDescTemplData provides template data for the long
+// description of the widget sub-command.
 type WidgetCmdLongDescTemplData struct {
 	arcadiaTemplData
 }

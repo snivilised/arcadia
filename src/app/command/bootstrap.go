@@ -17,6 +17,8 @@ import (
 	"golang.org/x/text/language"
 )
 
+// LocaleDetector abstracts the detection of the user's preferred
+// language as a BCP 47 language tag.
 type LocaleDetector interface {
 	Scan() language.Tag
 }
@@ -31,18 +33,30 @@ func (j *Jabber) Scan() language.Tag {
 	return language.MustParse(lang)
 }
 
+// ConfigInfo describes the configuration file that should be loaded,
+// including its name, type, path and the viper instance to use.
 type ConfigInfo struct {
-	Name       string
+	// Name of the configuration name.
+	Name string
+	// ConfigType specifies the configuration type.
 	ConfigType string
+	// ConfigPath is the path to the configuration.
 	ConfigPath string
-	Viper      configuration.ViperConfig
+	// Viper instance to load the configuration.
+	Viper configuration.ViperConfig
 }
 
+// ConfigureOptions groups configuration options that influence how
+// Bootstrap initialises localisation and configuration.
 type ConfigureOptions struct {
+	// Detector for locale identification.
 	Detector LocaleDetector
-	Config   ConfigInfo
+	// Config describing the configuration.
+	Config ConfigInfo
 }
 
+// ConfigureOptionFn is a functional option used to modify
+// ConfigureOptions before Bootstrap performs its setup.
 type ConfigureOptionFn func(*ConfigureOptions)
 
 // Bootstrap represents construct that performs start up of the cli

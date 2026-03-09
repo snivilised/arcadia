@@ -5,7 +5,10 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+// Field is an alias for zap.Field used by the internal logging package.
 type Field = zap.Field
+
+// Level is an alias for zapcore.Level representing the logging level.
 type Level = zapcore.Level
 
 const (
@@ -15,6 +18,7 @@ const (
 	ErrorLevel = zapcore.ErrorLevel
 )
 
+// Logger describes the logging contract used internally by arcadia.
 type Logger interface {
 	Debug(msg string, fields ...Field)
 	Info(msg string, fields ...Field)
@@ -23,18 +27,30 @@ type Logger interface {
 	Sync() error
 }
 
+// Rotation captures file-based log rotation settings such as size,
+// number of backups and age.
 type Rotation struct {
-	Filename       string
-	MaxSizeInMb    int
+	// Filename of the log file.
+	Filename string
+	// MaxSizeInMb specifies the maximum size in megabytes before rotation.
+	MaxSizeInMb int
+	// MaxNoOfBackups specifies the maximum number of old log files to retain.
 	MaxNoOfBackups int
-	MaxAgeInDays   int
+	// MaxAgeInDays specifies the maximum number of days to retain old log files.
+	MaxAgeInDays int
 }
 
+// LoggerInfo groups the configuration needed to construct a Logger,
+// including rotation, output path, time format and level.
 type LoggerInfo struct {
 	Rotation
 
-	Enabled         bool
-	Path            string
+	// Enabled indicates whether the logger is initially enabled.
+	Enabled bool
+	// Path to the log file.
+	Path string
+	// TimeStampFormat specifies the format for timestamps.
 	TimeStampFormat string
-	Level           Level
+	// Level specifies the logging level.
+	Level Level
 }

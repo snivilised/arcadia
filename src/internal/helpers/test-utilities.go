@@ -54,7 +54,8 @@ func Repo(relative string) string {
 
 	segments := strings.Split(relative, "/")
 	output := strings.TrimSuffix(string(bytes), "\n")
-	path := []string{output}
+	path := make([]string, 1, len(segments)+1)
+	path[0] = output
 	path = append(path, segments...)
 
 	return filepath.Join(path...)
