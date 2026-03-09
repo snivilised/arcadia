@@ -2,8 +2,9 @@ package domain
 
 import "github.com/snivilised/cobrass/src/assistant"
 
-// CLIENT-TODO: remove this dummy enum type definition
-
+// OutputFormatEnum is a placeholder enumeration that represents the
+// different output formats supported by the widget command.
+// CLIENT-TODO: remove or replace this dummy enum definition as needed.
 type OutputFormatEnum int
 
 const (
@@ -21,15 +22,25 @@ var OutputFormatEnumInfo = assistant.NewEnumInfo(assistant.AcceptableEnumValues[
 	ScribbleFormatEn: []string{"scribble", "scribbler", "scr"},
 })
 
-// WidgetParameterSet
+// WidgetParameterSet defines the parameters that control the behaviour
+// of the widget command, including input location, formatting and
+// filtering options.
 type WidgetParameterSet struct {
+	// Directory to process.
 	Directory string
-	Concise   bool
-	Pattern   string
+	// Concise output flag.
+	Concise bool
+	// Pattern to match.
+	Pattern string
+	// Threshold for processing.
 	Threshold uint
 
-	Format   OutputFormatEnum
+	// Format of the output.
+	Format OutputFormatEnum
+	// FormatEn is the enumerable output format.
 	FormatEn assistant.EnumValue[OutputFormatEnum]
 }
 
+// WidgetParamSetPtr is a convenience alias for a parameter set that
+// wraps a WidgetParameterSet instance.
 type WidgetParamSetPtr = *assistant.ParamSet[WidgetParameterSet]

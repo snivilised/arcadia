@@ -19,9 +19,9 @@ func NewLogger(info *LoggerInfo) (Logger, error) {
 
 	ws := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   info.Path,
-		MaxSize:    info.Rotation.MaxSizeInMb,
-		MaxBackups: info.Rotation.MaxNoOfBackups,
-		MaxAge:     info.Rotation.MaxAgeInDays,
+		MaxSize:    info.MaxSizeInMb,
+		MaxBackups: info.MaxNoOfBackups,
+		MaxAge:     info.MaxAgeInDays,
 	})
 	config := zap.NewProductionEncoderConfig()
 	config.EncodeTime = zapcore.TimeEncoderOfLayout(info.TimeStampFormat)

@@ -8,7 +8,9 @@ import (
 
 // CommandTester eases creation of unit tests for cobra command
 type CommandTester struct {
+	// Args to pass to the cobra command.
 	Args []string
+	// Root cobra command to execute.
 	Root *cobra.Command
 }
 

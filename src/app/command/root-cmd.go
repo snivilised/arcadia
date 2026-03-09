@@ -14,7 +14,9 @@ func Execute() error {
 	return (&Bootstrap{}).Root().Execute()
 }
 
-// CLIENT-TODO: define valid properties on the root parameter set
+// RootParameterSet defines the configuration options exposed on the
+// root command's parameter set (CLIENT-TODO: refine these properties).
 type RootParameterSet struct {
+	// Language defines the IETF BCP 47 language tag.
 	Language string
 }

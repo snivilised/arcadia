@@ -14,7 +14,9 @@ import (
 // it is not useable at run time.
 type FooBarTemplData struct {
 	arcadiaTemplData
-	Path   string
+	// Path of the entity causing the error.
+	Path string
+	// Reason for the failure.
 	Reason error
 }
 
@@ -28,6 +30,8 @@ func (td FooBarTemplData) Message() *i18n.Message {
 	}
 }
 
+// FooBarError represents a localisable FooBar error that can be
+// rendered using li18ngo and the associated FooBarTemplData message.
 type FooBarError struct {
 	li18ngo.LocalisableError
 }

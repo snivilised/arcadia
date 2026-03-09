@@ -8,6 +8,8 @@ const (
 	GrafficoSourceID = "github.com/snivilised/graffico"
 )
 
+// GrafficoData provides the source identifier used by the unit-test
+// messages for the graffico project.
 type GrafficoData struct{}
 
 func (td GrafficoData) SourceID() string {
@@ -16,7 +18,9 @@ func (td GrafficoData) SourceID() string {
 
 // 🧊 Pavement Graffiti Report
 
-// PavementGraffitiReportTemplData
+// PavementGraffitiReportTemplData contains template data for reporting
+// that graffiti has been found on a pavement, including its primary
+// colour.
 type PavementGraffitiReportTemplData struct {
 	GrafficoData
 	Primary string
@@ -32,7 +36,8 @@ func (td PavementGraffitiReportTemplData) Message() *i18n.Message {
 
 // ☢️ Wrong Source Id
 
-// WrongSourceIDTemplData
+// WrongSourceIDTemplData contains template data that deliberately uses
+// an incorrect source identifier to verify error handling in tests.
 type WrongSourceIDTemplData struct {
 	GrafficoData
 }

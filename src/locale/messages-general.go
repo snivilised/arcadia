@@ -4,8 +4,11 @@ import (
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
+// UsingConfigFileTemplData holds template data for the message
+// that reports which configuration file is being used.
 type UsingConfigFileTemplData struct {
 	arcadiaTemplData
+	// ConfigFileName represents the configuration file name.
 	ConfigFileName string
 }
 
