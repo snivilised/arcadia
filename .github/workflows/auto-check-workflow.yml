@@ -63,3 +63,5 @@ jobs:
             git push origin HEAD:${{ github.event.repository.default_branch }}
           else
             echo "No changes to commit"
+          fi
+
