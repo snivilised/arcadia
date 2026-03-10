@@ -1,6 +1,6 @@
 name: Initialise Repo
 on:
-  create:
+  push:
     branches:
       # NB: its difficult to get the default branch dynamically in
       # push event, so it has been hardcoded.
@@ -28,7 +28,7 @@ jobs:
       - name: Configure Git
         run: |
           git config --global user.name "${GITHUB_ACTOR}"
-          git config --global user.email "${GITHUB_ACTOR_EMAIL}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
         shell: bash
 
       - name: Checkout
@@ -38,8 +38,7 @@ jobs:
 
       - name: Run script
         run: |
-          . ./scripts/automate-checklist.sh
-          auto-check
+          go run ./scripts/automate-checklist.go
         shell: bash
 
       - name: Go Format
@@ -47,17 +46,27 @@ jobs:
           go fmt ./...
         shell: bash
 
+      - name: Go Mod Tidy
+        run: |
+          go mod tidy
+        shell: bash
+
       - name: Clean up redundant scripts
         run: |
           rm -fv .github/workflows/auto-check-workflow.yml 2>/dev/null
           rm -fv ./scripts/automate-checklist.sh 2>/dev/null
+          rm -fv ./scripts/automate-checklist.go 2>/dev/null
         shell: bash
 
       - name: Add files and commit changes
         run: |
           git add .
-          git commit -m "chore(gh-actions): apply auto-check edits"
-          git push -u origin ${{ github.event.repository.default_branch }}
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "chore(gh-actions): apply auto-check edits"
+            git push -u origin ${{ github.event.repository.default_branch }}
+          else
+            echo "No changes to commit"
+          fi
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
