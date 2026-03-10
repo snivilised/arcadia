@@ -26,7 +26,7 @@
 <!-- MarkDownLint-disable MD028 -->
 
 <p align="left">
-  <a href="https://go.dev"><img src="resources/images/go-logo-light-blue.png" width="50" /></a>
+  <a href="https://go.dev"><img src="resources/images/go-logo-light-blue.png" alt="Go logo" width="50" /></a>
 </p>
 
 ## 🔰 Introduction
@@ -38,8 +38,8 @@ This project is a template to aid in the startup of Go cli applications.
 ## 🎀 Features
 
 <p align="left">
-  <a href="https://onsi.github.io/ginkgo/"><img src="https://onsi.github.io/ginkgo/images/ginkgo.png" width="100" /></a>
-  <a href="https://onsi.github.io/gomega/"><img src="https://onsi.github.io/gomega/images/gomega.png" width="100" /></a>
+  <a href="https://onsi.github.io/ginkgo/"><img src="https://onsi.github.io/ginkgo/images/ginkgo.png" alt="Ginkgo logo" width="100" /></a>
+  <a href="https://onsi.github.io/gomega/"><img src="https://onsi.github.io/gomega/images/gomega.png" alt="Gomega logo" width="100" /></a>
 </p>
 
 + unit testing with [Ginkgo](https://onsi.github.io/ginkgo/)/[Gomega](https://onsi.github.io/gomega/)
@@ -53,39 +53,31 @@ By using this template, there is no need to use the cobra-cli to scaffold your a
 
 ### 📝 Checklist of required changes
 
-The following is list of actions that must be performed before using this template. Most of the changes concern changing the name `Arcadia` to the name of the new application. As the template is instantiated from github, the new name will automatically replace the top level directory name, that being ___arcadia___.
+The following is list of actions that must be performed before using this template. Most of the changes concern changing the name `Arcadia` to the name of the new application. As the template is instantiated from github, the new name will automatically replace the top level directory name, that being ___arcadia___. However, there are 2 situations at hand:
+
+1) target repo is owned by the snivilised organisation: the changes required will be made automatically after the repo has been created from the template WITHOUT user intervention
+
+2) target repo is NOT owned by snivilised, therefore user action is required after being cloned. Follow this sequence of steps:
+
++ after cloning the repo, run the task, autocheck:
+
+```
+  $ task autocheck
+```
+
+This will result in various changes being made to the project. If you are using the pull-request model, then please make sure that you are on a feature branch before running the autocheck task. You can then check-in, then push the changes as per normal:
+
+```
+$ git add .
+$ git commit -m "chore: initialise repository from template"
+$ git push
+```
 
 ➕ The following descriptions use owner name ___pandora___ and repo name ___maestro___ as an example. That is to say the client has instantiated ___arcadia___ template into github at url _github.com/pandora/maestro_
 
 #### 🤖 Automated changes
 
-Automated via `automate-checklist.sh` script. When the user instantiates the repo, a github actions workflow is executed which applies changes to the clients repo automatically. The following description describes the changes that are applied on the user's behalf and the workflow is automatically deleted. However, there are other changes that should be made. These compose the manual checklist and should be heeded by the user.
-
-##### ✅ Rename import statements
-
-+ `rename import paths`: global search and replace ___snivilised/arcadia___ to ___pandora/maestro___
-
-##### ✅ Identifiers
-
-+ `change arcadiaTemplData`: perform a refactor rename (_Rename Symbol_) to ___maestroTemplData___
-
-##### ✅ Global search replace arcadia to maestro
-
-Will take care of the following required changes:
-
-+ `change module name`: update the module name inside the .mod file in the root directory
-+ `change ApplicationName`: modify to reflect the new application name. This application name is incorporated into the name of any translation files to be loaded.
-+ `update BINARY_NAME`: Inside _Taskfile.yml_, change the value of ___BINARY_NAME___ to the name of the client application.
-+ `update github action workflows`: change the name of the workflows in the .yaml files to replace ___Arcadia___ to ___Maestro___ (note the change of case, if this is important).
-
-##### ✅ Localisation/Internationalisation
-
-+ `change the names of the translation files`: eg change ___arcadia.active.en-GB.json___ to ___maestro.active.en-GB.json___
-
-##### ✅ Miscellaneous automated changes
-
-+ `reset version files`: this is optional because the release process automatically updates the version number according to the tag specified by the user, but will initially contain the version number which reflects the current value of arcadia at the time the client project is instantiated.
-+ `change SOURCE_ID`: to "github.com/pandora/maestro"
+Automated via `./scripts/automate-checklist.go` script. This is invoked by the autocheck task. You can look at the contents of this file, before running the autocheck task, doing so, you'll gain an understanding of the changes that will be implemented, if you're so inclined. After the task is run, this go script will be deleted.
 
 #### 🖐 Manual changes
 
@@ -98,6 +90,10 @@ The following documents manual changes required. Manual checklist:
 + `rename the widget command`: rename __widget-cmd.go__ and its associated test __widget_test.go__ to whatever is the first command to be implemented in the application. The widget command can serve as a template as to how to define a new command, without having to start from scratch. It will be easier for the user to modify an existing command, so just perform a case sensitive search and replace for ___widget/Widget___ and replace with ___Foo/foo___ where foo represents the new command to be created.
 
 + `review bootstrap.go`: this will need to be modified to invoke creation of any custom commands. The `execute` method of __bootstrap__ should be modified to invoke command builder. Refer to the `widget` command to see how this is done.
+
+#### ☑️ Taskfile change
+
++ Remove the autocheck task from Taskfile.yml
 
 #### ☑️ Github changes
 

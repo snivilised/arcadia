@@ -1,73 +1,65 @@
-name: Initialise Repo
+name: Initialise Repository
+
 on:
   push:
     branches:
-      # NB: its difficult to get the default branch dynamically in
-      # push event, so it has been hardcoded.
-      # ${{ github.event.repository.default_branch }} does not
-      # work in this scenario.
-      #
-      - main
+      - main  # first push triggers bootstrap
 
 permissions:
   contents: write
-  workflows: write
 
 jobs:
-  run-script:
-    name: run script
-
-    # We will only run this action when this repository isn't the
-    # template repository
-    #
-    if: >-
-      ${{ !github.event.repository.is_template }}
-
+  bootstrap:
+    # Only run for org repos and skip template repositories
+    if: ${{ github.repository_owner == 'snivilised' && !github.event.repository.is_template }}
     runs-on: ubuntu-latest
 
     steps:
-      - name: Configure Git
-        run: |
-          git config --global user.name "${GITHUB_ACTOR}"
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-        shell: bash
-
-      - name: Checkout
+      # Checkout repository using default github.token (always safe)
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
 
-      - name: Run script
+      # Configure Git author
+      - name: Configure Git
         run: |
-          go run ./scripts/automate-checklist.go
-        shell: bash
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Go Format
+      # Install Go version specified in go.mod
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      # Run automation script
+      - name: Run automation script
+        run: go run ./scripts/automate-checklist.go
+
+      # Format code and tidy modules
+      - name: Format & tidy Go
         run: |
           go fmt ./...
-        shell: bash
-
-      - name: Go Mod Tidy
-        run: |
           go mod tidy
-        shell: bash
 
-      - name: Clean up redundant scripts
+      # Remove bootstrap/template-only files
+      - name: Clean up template scripts
         run: |
-          rm -fv .github/workflows/auto-check-workflow.yml 2>/dev/null
-          rm -fv ./scripts/automate-checklist.sh 2>/dev/null
-          rm -fv ./scripts/automate-checklist.go 2>/dev/null
-        shell: bash
+          rm -fv .github/workflows/auto-check-workflow.yml
+          rm -fv ./scripts/automate-checklist.go
+          rm -fv ./scripts/automate-checklist.sh
 
-      - name: Add files and commit changes
+      # Commit & push changes using org PAT (no linter warning)
+      - name: Commit & push changes
+        env:
+          ORG_PAT: ${{ secrets.AUTOMATION_PAT }}
         run: |
           git add .
           if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "chore(gh-actions): apply auto-check edits"
-            git push -u origin ${{ github.event.repository.default_branch }}
+            git commit -m "chore(repo): bootstrap repository"
+            # Update remote URL to include PAT for push
+            git remote set-url origin https://x-access-token:${ORG_PAT}@github.com/${GITHUB_REPOSITORY}.git
+            git push origin HEAD:${{ github.event.repository.default_branch }}
           else
             echo "No changes to commit"
-          fi
-        shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

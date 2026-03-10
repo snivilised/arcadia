@@ -197,6 +197,18 @@ tasks:
       - go tool cover -html=./coverage.out -o {{.COVER_HTML_PATH}}
       - open {{.COVER_HTML_PATH}}
 
+  # === auto-check ===========================================
+
+  autocheck:
+    desc: Initialise repository from template
+    cmds:
+      - go run ./scripts/automate-checklist.go
+      - go fmt ./...
+      - go mod tidy
+      - rm -f .github/workflows/auto-check-workflow.yml
+      - rm -f scripts/automate-checklist.go
+      - rm -f scripts/automate-checklist.sh
+
   # === i18n =================================================
 
   clear:
