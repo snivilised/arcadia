@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/onsi/ginkgo/v2 v2.28.1
-	github.com/onsi/gomega v1.39.1
+	github.com/onsi/gomega v1.40.0
 	github.com/pkg/errors v0.9.1
 	github.com/samber/lo v1.53.0
 	github.com/snivilised/li18ngo v0.1.10
